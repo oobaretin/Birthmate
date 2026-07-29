@@ -25,6 +25,19 @@ final class WikipediaSummaryService {
         return WikiImageURL.resolved(summary.thumbnail?.source)
     }
 
+    func fetchOriginalImageURL(title: String) async -> String? {
+        guard let summary = await fetchSummary(title: title) else { return nil }
+        if let original = summary.originalImage?.source {
+            return original
+        }
+        return summary.thumbnail?.source
+    }
+
+    func fetchOriginalImageURL(for item: OnThisDayItem) async -> String? {
+        guard let title = wikipediaTitle(for: item) else { return nil }
+        return await fetchOriginalImageURL(title: title)
+    }
+
     private func wikipediaTitle(for item: OnThisDayItem) -> String? {
         if let title = item.primaryPage?.title, !title.isEmpty { return title }
         guard let urlString = item.primaryPage?.contentUrls?.desktop?.page,
@@ -67,6 +80,13 @@ enum WikipediaTitleEncoding {
 private struct WikipediaSummary: Decodable {
     let extract: String?
     let thumbnail: WikipediaThumbnail?
+    let originalImage: WikipediaThumbnail?
+
+    enum CodingKeys: String, CodingKey {
+        case extract
+        case thumbnail
+        case originalImage = "originalimage"
+    }
 }
 
 private struct WikipediaThumbnail: Decodable {

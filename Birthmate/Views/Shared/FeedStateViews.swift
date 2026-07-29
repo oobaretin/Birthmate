@@ -44,6 +44,35 @@ actor WikiPersonImageService {
 
         return nil
     }
+
+    func fullSizeImage(primaryURL: String?, wikiTitle: String?) async -> UIImage? {
+        let cacheKey = "full|\(primaryURL ?? "")|\(wikiTitle ?? "")"
+        if let cached = cache[cacheKey] { return cached }
+
+        var candidates: [String] = []
+        if let primaryURL {
+            candidates.append(primaryURL)
+            if let resolved = WikiImageURL.resolved(primaryURL, width: 1200) {
+                candidates.append(resolved)
+            }
+        }
+        if let wikiTitle,
+           let originalURL = await WikipediaSummaryService.shared.fetchOriginalImageURL(title: wikiTitle) {
+            candidates.append(originalURL)
+            if let resolved = WikiImageURL.resolved(originalURL, width: 1200) {
+                candidates.append(resolved)
+            }
+        }
+
+        for candidate in candidates {
+            if let loaded = await WikiImageLoader.load(from: candidate, width: 1200) {
+                cache[cacheKey] = loaded
+                return loaded
+            }
+        }
+
+        return await image(primaryURL: primaryURL, wikiTitle: wikiTitle, width: 800)
+    }
 }
 
 struct PersonThumbnailView: View {
@@ -99,7 +128,9 @@ struct PersonHeroImageView: View {
     let urlString: String?
     var wikiTitle: String?
 
-    @State private var image: UIImage?
+    @State private var previewImage: UIImage?
+    @State private var fullScreenImage: UIImage?
+    @State private var showFullScreen = false
 
     private var loadKey: String {
         "\(urlString ?? "")|\(wikiTitle ?? "")"
@@ -107,19 +138,35 @@ struct PersonHeroImageView: View {
 
     var body: some View {
         Group {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 260)
-                    .clipped()
+            if let previewImage {
+                Button(action: presentFullScreen) {
+                    Image(uiImage: previewImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: 340)
+                        .background(Color(.secondarySystemBackground))
+                        .overlay(alignment: .bottomTrailing) {
+                            Label("View full photo", systemImage: "arrow.up.left.and.arrow.down.right")
+                                .font(.caption.weight(.semibold))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Capsule())
+                                .padding(10)
+                        }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("View full photo")
             } else {
                 heroPlaceholder
             }
         }
         .task(id: loadKey) {
-            await loadImage()
+            await loadPreview()
+        }
+        .fullScreenCover(isPresented: $showFullScreen) {
+            FullScreenImageView(image: fullScreenImage ?? previewImage ?? UIImage())
         }
     }
 
@@ -134,14 +181,62 @@ struct PersonHeroImageView: View {
             )
     }
 
-    private func loadImage() async {
-        image = nil
+    private func loadPreview() async {
+        previewImage = nil
         let loaded = await WikiPersonImageService.shared.image(
             primaryURL: urlString,
             wikiTitle: wikiTitle,
             width: 800
         )
-        await MainActor.run { image = loaded }
+        await MainActor.run { previewImage = loaded }
+    }
+
+    private func presentFullScreen() {
+        guard let previewImage else { return }
+        fullScreenImage = previewImage
+        showFullScreen = true
+
+        Task {
+            if let loaded = await WikiPersonImageService.shared.fullSizeImage(
+                primaryURL: urlString,
+                wikiTitle: wikiTitle
+            ) {
+                await MainActor.run { fullScreenImage = loaded }
+            }
+        }
+    }
+}
+
+struct FullScreenImageView: View {
+    let image: UIImage
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Color.black.ignoresSafeArea()
+
+            if image.size.width > 0, image.size.height > 0 {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding()
+            } else {
+                ProgressView()
+                    .tint(.white)
+            }
+
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 28))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, .black.opacity(0.35))
+                    .padding()
+            }
+            .accessibilityLabel("Close")
+        }
     }
 }
 
