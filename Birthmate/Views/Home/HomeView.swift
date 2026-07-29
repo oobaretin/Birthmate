@@ -49,6 +49,7 @@ struct HomeView: View {
                                         PersonRow(item: item)
                                     }
                                     .buttonStyle(.plain)
+                                    .listRowSeparator(.visible)
                                 }
                             } header: {
                                 VStack(alignment: .leading, spacing: 2) {
@@ -207,6 +208,7 @@ struct PersonRow: View {
             }
         }
         .padding(.vertical, 4)
+        .id(item.id)
     }
 }
 
