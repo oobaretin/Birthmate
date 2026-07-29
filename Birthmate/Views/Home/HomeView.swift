@@ -211,7 +211,11 @@ struct PersonRow: View {
 struct PersonDetailView: View {
     let item: OnThisDayItem
     let dateLabel: String
+    @EnvironmentObject var profileStore: ProfileStore
+    @EnvironmentObject var authStore: AuthStore
+    @EnvironmentObject var birthdateStore: BirthdateStore
     @State private var loadedExtract: String?
+    @StateObject private var socialActions = CommunityViewModel()
 
     private var bodyText: String {
         if let loadedExtract { return loadedExtract }
@@ -251,10 +255,28 @@ struct PersonDetailView: View {
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    ShareLink(item: WikiFormatting.shareText(for: item, dateLabel: dateLabel, isBirth: true)) {
-                        Label("Share your Birthmate", systemImage: "square.and.arrow.up")
+                    HStack(spacing: 12) {
+                        Button {
+                            Task { await toggleFavorite() }
+                        } label: {
+                            Label(
+                                profileStore.isFavorite(item) ? "Favorited" : "Favorite",
+                                systemImage: profileStore.isFavorite(item) ? "heart.fill" : "heart"
+                            )
                             .font(.subheadline.weight(.medium))
+                        }
+                        .tint(BirthmateTheme.accent)
+
+                        Button {
+                            Task { await setFamousTwin() }
+                        } label: {
+                            Label("My famous twin", systemImage: "star.fill")
+                                .font(.subheadline.weight(.medium))
+                        }
+                        .tint(BirthmateTheme.accent)
                     }
+
+                    ShareBirthmateCardLink(item: item, dateLabel: dateLabel)
 
                     if let urlString = item.primaryPage?.contentUrls?.desktop?.page,
                        let url = URL(string: urlString) {
@@ -273,6 +295,18 @@ struct PersonDetailView: View {
                 loadedExtract = await WikipediaSummaryService.shared.fetchExtract(for: item)
             }
         }
+    }
+
+    private func toggleFavorite() async {
+        guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
+        await socialActions.toggleFavorite(item, profile: profileStore, authStore: authStore)
+        _ = month
+        _ = day
+    }
+
+    private func setFamousTwin() async {
+        guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
+        await socialActions.setFamousTwin(item, month: month, day: day, profile: profileStore, authStore: authStore)
     }
 }
 

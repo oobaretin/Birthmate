@@ -2,8 +2,10 @@ import SwiftUI
 
 struct TodayView: View {
     @EnvironmentObject var birthdateStore: BirthdateStore
+    @EnvironmentObject var authStore: AuthStore
     @Binding var selectedTab: AppTab
     @StateObject private var viewModel = TodayViewModel()
+    @StateObject private var activityViewModel = ActivityViewModel()
 
     private var formattedDate: String {
         guard let month = birthdateStore.month, let day = birthdateStore.day else { return "" }
@@ -52,6 +54,7 @@ struct TodayView: View {
             }
         }
         .task { await reload() }
+        .task { await activityViewModel.load(authStore: authStore) }
     }
 
     private var scrollContent: some View {
@@ -68,6 +71,7 @@ struct TodayView: View {
                 }
 
                 statsSection
+                activitySection
                 exploreSection
 
                 LastUpdatedLabel(date: viewModel.lastUpdated)
@@ -125,6 +129,36 @@ struct TodayView: View {
         }
     }
 
+    private var activitySection: some View {
+        Group {
+            if !activityViewModel.events.isEmpty {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label("Your activity", systemImage: "bell.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(BirthmateTheme.accent)
+
+                    ForEach(activityViewModel.events.prefix(3)) { event in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(event.title)
+                                .font(.subheadline.weight(.medium))
+                            if let detail = event.detail {
+                                Text(detail)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(Color(.secondarySystemGroupedBackground))
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private var statsSection: some View {
         HStack(spacing: 12) {
             StatBadge(value: viewModel.birthCount, label: "Birthmates", icon: "person.2.fill")
@@ -135,6 +169,17 @@ struct TodayView: View {
 
     private var exploreSection: some View {
         VStack(spacing: 12) {
+            Button {
+                selectedTab = .community
+            } label: {
+                ExploreRow(
+                    title: "See real birthday twins",
+                    subtitle: "Meet others in Birthday Circle",
+                    systemImage: "person.3.fill"
+                )
+            }
+            .buttonStyle(.plain)
+
             Button {
                 selectedTab = .people
             } label: {

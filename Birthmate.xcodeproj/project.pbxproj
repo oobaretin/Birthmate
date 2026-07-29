@@ -21,6 +21,23 @@
 		6A1B2C3D4E5F6789012345A1 /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1B2C3D4E5F6789012345A1 /* AppTab.swift */; };
 		6B2C3D4E5F6789012345A2 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2C3D4E5F6789012345A2 /* TodayView.swift */; };
 		6C3D4E5F6789012345A3 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D4E5F6789012345A3 /* TodayViewModel.swift */; };
+		8D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift */; };
+		8E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift */; };
+		8F3A4B5C6D7E8F90123456 /* CommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3A4B5C6D7E8F90123456 /* CommunityService.swift */; };
+		903A4B5C6D7E8F901234567 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A4B5C6D7E8F901234567 /* CommunityView.swift */; };
+		913A4B5C6D7E8F901234568 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A4B5C6D7E8F901234568 /* CommunityViewModel.swift */; };
+		923A4B5C6D7E8F901234569 /* MockCommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823A4B5C6D7E8F901234569 /* MockCommunityService.swift */; };
+		933A4B5C6D7E8F90123456A /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A4B5C6D7E8F90123456A /* ProfileStore.swift */; };
+		943A4B5C6D7E8F90123456B /* SupabaseCommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843A4B5C6D7E8F90123456B /* SupabaseCommunityService.swift */; };
+		953A4B5C6D7E8F90123456C /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853A4B5C6D7E8F90123456D /* AuthSession.swift */; };
+		963A4B5C6D7E8F90123456E /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873A4B5C6D7E8F90123456F /* AuthStore.swift */; };
+		973A4B5C6D7E8F901234570 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883A4B5C6D7E8F901234571 /* KeychainStore.swift */; };
+		983A4B5C6D7E8F901234572 /* SignInWithAppleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A4B5C6D7E8F901234573 /* SignInWithAppleButtonView.swift */; };
+		993A4B5C6D7E8F901234574 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3A4B5C6D7E8F901234575 /* SupabaseAuthService.swift */; };
+		9A3A4B5C6D7E8F901234576 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3A4B5C6D7E8F901234577 /* SupabaseClient.swift */; };
+		9B3A4B5C6D7E8F901234578 /* SupabaseSocialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3A4B5C6D7E8F901234579 /* SupabaseSocialService.swift */; };
+		9C3A4B5C6D7E8F90123457A /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4B5C6D7E8F90123457B /* ActivityViewModel.swift */; };
+		9D3A4B5C6D7E8F90123457C /* ShareBirthmateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */; };
 		654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */; };
 		6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */; };
 		826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */; };
@@ -88,6 +105,23 @@
 		7A1B2C3D4E5F6789012345A1 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		7B2C3D4E5F6789012345A2 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		7C3D4E5F6789012345A3 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
+		7D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateSecrets.swift; sourceTree = "<group>"; };
+		7E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityMember.swift; sourceTree = "<group>"; };
+		7F3A4B5C6D7E8F90123456 /* CommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityService.swift; sourceTree = "<group>"; };
+		803A4B5C6D7E8F901234567 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		813A4B5C6D7E8F901234568 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
+		823A4B5C6D7E8F901234569 /* MockCommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCommunityService.swift; sourceTree = "<group>"; };
+		833A4B5C6D7E8F90123456A /* ProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStore.swift; sourceTree = "<group>"; };
+		843A4B5C6D7E8F90123456B /* SupabaseCommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseCommunityService.swift; sourceTree = "<group>"; };
+		853A4B5C6D7E8F90123456D /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
+		873A4B5C6D7E8F90123456F /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
+		883A4B5C6D7E8F901234571 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		893A4B5C6D7E8F901234573 /* SignInWithAppleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButtonView.swift; sourceTree = "<group>"; };
+		8A3A4B5C6D7E8F901234575 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		8B3A4B5C6D7E8F901234577 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
+		8C3A4B5C6D7E8F901234579 /* SupabaseSocialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseSocialService.swift; sourceTree = "<group>"; };
+		8D3A4B5C6D7E8F90123457B /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
+		8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareBirthmateCardView.swift; sourceTree = "<group>"; };
 		8A31FD1D19D69490250C1610 /* Birthmate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Birthmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AC49677A19F1BEDEFB4902E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateTheme.swift; sourceTree = "<group>"; };
@@ -116,6 +150,8 @@
 			children = (
 				1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */,
 				1AF78FDC11F5A610DE35A8F1 /* OnThisDayViewModel.swift */,
+				813A4B5C6D7E8F901234568 /* CommunityViewModel.swift */,
+				8D3A4B5C6D7E8F90123457B /* ActivityViewModel.swift */,
 				7C3D4E5F6789012345A3 /* TodayViewModel.swift */,
 			);
 			path = ViewModels;
@@ -140,6 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				578604DBD01A6E4CBAA3435B /* Home */,
+				8F3A4B5C6D7E8F90123457E /* Auth */,
+				853A4B5C6D7E8F90123456C /* Community */,
 				FDCF407814D5813E46B0EA0C /* Onboarding */,
 				B6C1278404182828DD6DD765 /* OnThisDay */,
 				7D4E5F6789012345A4 /* Today */,
@@ -193,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */,
+				883A4B5C6D7E8F901234571 /* KeychainStore.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -220,8 +259,17 @@
 			isa = PBXGroup;
 			children = (
 				97DFF34CE3D550DEFDDED617 /* APIService.swift */,
+				873A4B5C6D7E8F90123456F /* AuthStore.swift */,
+				7D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift */,
 				989E155311C63C4C24FF2853 /* BirthdateStore.swift */,
+				7F3A4B5C6D7E8F90123456 /* CommunityService.swift */,
+				823A4B5C6D7E8F901234569 /* MockCommunityService.swift */,
 				3E7D4398F79FC5906A830825 /* NotificationManager.swift */,
+				833A4B5C6D7E8F90123456A /* ProfileStore.swift */,
+				8A3A4B5C6D7E8F901234575 /* SupabaseAuthService.swift */,
+				843A4B5C6D7E8F90123456B /* SupabaseCommunityService.swift */,
+				8B3A4B5C6D7E8F901234577 /* SupabaseClient.swift */,
+				8C3A4B5C6D7E8F901234579 /* SupabaseSocialService.swift */,
 				9A459B92FFED244A8B0C176D /* WikidataService.swift */,
 				AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */,
 			);
@@ -236,12 +284,29 @@
 			path = Today;
 			sourceTree = "<group>";
 		};
+		8F3A4B5C6D7E8F90123457E /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				893A4B5C6D7E8F901234573 /* SignInWithAppleButtonView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		853A4B5C6D7E8F90123456C /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				803A4B5C6D7E8F901234567 /* CommunityView.swift */,
+			);
+			path = Community;
+			sourceTree = "<group>";
+		};
 		853359655F8B9404194AF1CB /* Shared */ = {
 			isa = PBXGroup;
 			children = (
 				E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */,
 				949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */,
 				C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */,
+				8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -275,6 +340,8 @@
 			isa = PBXGroup;
 			children = (
 				35DB768B1F65CE42F4EBE29A /* BirthPerson.swift */,
+				853A4B5C6D7E8F90123456D /* AuthSession.swift */,
+				7E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift */,
 				95CCA94D2EFB2A33089F71B4 /* OnThisDayModels.swift */,
 				3B39FF4C3DE185AD1259AB3D /* WikidataModels.swift */,
 			);
@@ -422,16 +489,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B960FA58C5A33CACD3B620 /* APIService.swift in Sources */,
+				963A4B5C6D7E8F90123456E /* AuthStore.swift in Sources */,
+				953A4B5C6D7E8F90123456C /* AuthSession.swift in Sources */,
 				6A1B2C3D4E5F6789012345A1 /* AppTab.swift in Sources */,
 				1FF950375E10ADDE6DB29D32 /* AppGroupStorage.swift in Sources */,
 				531FF348C43F8D6AB84692B7 /* BirthPerson.swift in Sources */,
+				8E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift in Sources */,
+				8F3A4B5C6D7E8F90123456 /* CommunityService.swift in Sources */,
+				903A4B5C6D7E8F901234567 /* CommunityView.swift in Sources */,
+				913A4B5C6D7E8F901234568 /* CommunityViewModel.swift in Sources */,
+				8D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift in Sources */,
 				F687876B0B39075DE19B5436 /* BirthdateStore.swift in Sources */,
+				923A4B5C6D7E8F901234569 /* MockCommunityService.swift in Sources */,
+				933A4B5C6D7E8F90123456A /* ProfileStore.swift in Sources */,
+				943A4B5C6D7E8F90123456B /* SupabaseCommunityService.swift in Sources */,
 				826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */,
 				9EEFA48F861A63386ABB99ED /* BirthmateApp.swift in Sources */,
 				CDDC97669FDDB2AB1524C57B /* BirthmateTheme.swift in Sources */,
 				654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */,
 				34AC489E14CF12857AD23402 /* FeedStateViews.swift in Sources */,
 				6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */,
+				9C3A4B5C6D7E8F90123457A /* ActivityViewModel.swift in Sources */,
+				973A4B5C6D7E8F901234570 /* KeychainStore.swift in Sources */,
 				9CCD0587B0B1D2F2FD8754CB /* HomeView.swift in Sources */,
 				5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */,
 				442342446F711353882EB283 /* NotificationManager.swift in Sources */,
@@ -441,6 +520,11 @@
 				C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */,
 				BAA3419A6199DE8919615146 /* RootView.swift in Sources */,
 				F91471A1799739AF59BBF5F6 /* SettingsView.swift in Sources */,
+				983A4B5C6D7E8F901234572 /* SignInWithAppleButtonView.swift in Sources */,
+				9D3A4B5C6D7E8F90123457C /* ShareBirthmateCardView.swift in Sources */,
+				993A4B5C6D7E8F901234574 /* SupabaseAuthService.swift in Sources */,
+				9A3A4B5C6D7E8F901234576 /* SupabaseClient.swift in Sources */,
+				9B3A4B5C6D7E8F901234578 /* SupabaseSocialService.swift in Sources */,
 				6B2C3D4E5F6789012345A2 /* TodayView.swift in Sources */,
 				6C3D4E5F6789012345A3 /* TodayViewModel.swift in Sources */,
 				90ED68DE3173181AEB9DA725 /* WikidataModels.swift in Sources */,

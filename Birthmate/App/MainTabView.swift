@@ -9,6 +9,10 @@ struct MainTabView: View {
                 .tabItem { Label("Today", systemImage: "sparkles") }
                 .tag(AppTab.today)
 
+            CommunityView()
+                .tabItem { Label("Circle", systemImage: "person.3.fill") }
+                .tag(AppTab.community)
+
             HomeView()
                 .tabItem { Label("People", systemImage: "person.2.fill") }
                 .tag(AppTab.people)
