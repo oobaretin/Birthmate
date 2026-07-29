@@ -52,3 +52,55 @@ struct ContentUrls: Codable, Hashable {
 struct ContentUrlDetail: Codable, Hashable {
     let page: String
 }
+
+enum OnThisDayMerger {
+    /// Combines multiple On This Day lists, deduplicating by Wikipedia title or name+year.
+    /// Keeps the entry with richer page data (thumbnail, extract, etc.).
+    static func merge(_ lists: [OnThisDayItem]...) -> [OnThisDayItem] {
+        merge(lists.flatMap { $0 })
+    }
+
+    static func merge(_ lists: [[OnThisDayItem]]) -> [OnThisDayItem] {
+        var byKey: [String: OnThisDayItem] = [:]
+        for list in lists {
+            for item in list {
+                let key = mergeKey(for: item)
+                if let existing = byKey[key] {
+                    byKey[key] = preferRicher(existing, item)
+                } else {
+                    byKey[key] = item
+                }
+            }
+        }
+        return Array(byKey.values)
+    }
+
+    static func mergeKey(for item: OnThisDayItem) -> String {
+        if let title = item.primaryPage?.title {
+            return normalizeWikiTitle(title)
+        }
+        let year = item.birthYear ?? item.eventYear ?? 0
+        return "\(year)-\(item.displayName.lowercased())"
+    }
+
+    private static func normalizeWikiTitle(_ title: String) -> String {
+        title
+            .replacingOccurrences(of: "_", with: " ")
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private static func preferRicher(_ lhs: OnThisDayItem, _ rhs: OnThisDayItem) -> OnThisDayItem {
+        richnessScore(rhs) > richnessScore(lhs) ? rhs : lhs
+    }
+
+    private static func richnessScore(_ item: OnThisDayItem) -> Int {
+        var score = 0
+        if item.primaryPage?.thumbnail?.source != nil { score += 4 }
+        if item.primaryPage?.originalImage?.source != nil { score += 2 }
+        if let extract = item.primaryPage?.extract, !extract.isEmpty { score += 3 }
+        if item.year != nil { score += 1 }
+        if item.primaryPage?.contentUrls?.desktop?.page != nil { score += 1 }
+        return score
+    }
+}

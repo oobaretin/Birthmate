@@ -15,6 +15,7 @@ final class TodayViewModel: ObservableObject {
     private var cachedBirths: [OnThisDayItem] = []
     private var cachedHighlights: [OnThisDayItem] = []
     private var cachedEvents: [OnThisDayItem] = []
+    private var cachedDeaths: [OnThisDayItem] = []
     private var loadedMonth: Int?
     private var loadedDay: Int?
 
@@ -35,23 +36,33 @@ final class TodayViewModel: ObservableObject {
         var births: [OnThisDayItem] = cachedBirths
         var events: [OnThisDayItem] = cachedEvents
         var highlights: [OnThisDayItem] = cachedHighlights
+        var deaths: [OnThisDayItem] = cachedDeaths
         var updatedAt: Date?
 
         if !forceRefresh,
            let cachedBirths = WikidataService.shared.cachedBirths(month: month, day: day),
+           cachedBirths.isComplete,
            !cachedBirths.items.isEmpty {
-            births = cachedBirths.items
+            let wikiBirths = try? await APIService.shared.fetch(type: .births, month: month, day: day, forceRefresh: false)
+            births = OnThisDayMerger.merge(cachedBirths.items, wikiBirths?.items ?? [])
             updatedAt = cachedBirths.fetchedAt
-            storeAndApply(births: births, events: events, highlights: highlights, month: month, day: day)
+            storeAndApply(births: births, events: events, highlights: highlights, deaths: deaths, month: month, day: day)
         }
 
         if !forceRefresh,
            let cachedEvents = APIService.shared.cachedEntry(type: .events, month: month, day: day),
-           let cachedSelected = APIService.shared.cachedEntry(type: .selected, month: month, day: day) {
+           let cachedSelected = APIService.shared.cachedEntry(type: .selected, month: month, day: day),
+           let cachedDeaths = APIService.shared.cachedEntry(type: .deaths, month: month, day: day) {
             events = cachedEvents.items.filter(\.hasValidEventYear)
             highlights = cachedSelected.items.filter(\.hasValidEventYear)
-            updatedAt = max(updatedAt ?? .distantPast, cachedEvents.fetchedAt, cachedSelected.fetchedAt)
-            storeAndApply(births: births, events: events, highlights: highlights, month: month, day: day)
+            deaths = cachedDeaths.items.filter(\.hasValidEventYear)
+            updatedAt = max(
+                updatedAt ?? .distantPast,
+                cachedEvents.fetchedAt,
+                cachedSelected.fetchedAt,
+                cachedDeaths.fetchedAt
+            )
+            storeAndApply(births: births, events: events, highlights: highlights, deaths: deaths, month: month, day: day)
         }
 
         do {
@@ -68,13 +79,29 @@ final class TodayViewModel: ObservableObject {
                 day: day,
                 forceRefresh: forceRefresh
             )
+            async let deathsTask = APIService.shared.fetch(
+                type: .deaths,
+                month: month,
+                day: day,
+                forceRefresh: forceRefresh
+            )
 
-            let (freshBirths, freshEvents, freshSelected) = try await (birthsTask, eventsTask, selectedTask)
+            let (freshBirths, freshEvents, freshSelected, freshDeaths) = try await (
+                birthsTask,
+                eventsTask,
+                selectedTask,
+                deathsTask
+            )
             births = freshBirths
             events = freshEvents.items.filter(\.hasValidEventYear)
             highlights = freshSelected.items.filter(\.hasValidEventYear)
-            updatedAt = max(freshEvents.fetchedAt, freshSelected.fetchedAt)
-            storeAndApply(births: births, events: events, highlights: highlights, month: month, day: day)
+            deaths = freshDeaths.items.filter(\.hasValidEventYear)
+            updatedAt = max(
+                freshEvents.fetchedAt,
+                freshSelected.fetchedAt,
+                freshDeaths.fetchedAt
+            )
+            storeAndApply(births: births, events: events, highlights: highlights, deaths: deaths, month: month, day: day)
             lastUpdated = updatedAt ?? Date()
         } catch {
             if featuredPerson == nil && featuredEvent == nil {
@@ -95,6 +122,14 @@ final class TodayViewModel: ObservableObject {
     }
 
     private func loadBirths(month: Int, day: Int, forceRefresh: Bool) async throws -> [OnThisDayItem] {
+        async let wikiTask = APIService.shared.fetch(
+            type: .births,
+            month: month,
+            day: day,
+            forceRefresh: forceRefresh
+        )
+
+        var wikidataItems: [OnThisDayItem] = []
         do {
             let fresh = try await WikidataService.shared.fetchBirths(
                 month: month,
@@ -102,38 +137,66 @@ final class TodayViewModel: ObservableObject {
                 forceRefresh: forceRefresh,
                 onPartialUpdate: nil
             )
-            return fresh.items
+            wikidataItems = fresh.items
         } catch {
-            let fallback = try await APIService.shared.fetch(
-                type: .births,
-                month: month,
-                day: day,
-                forceRefresh: forceRefresh
-            )
-            return fallback.items
+            wikidataItems = []
         }
+
+        let wikiItems = (try? await wikiTask)?.items ?? []
+        let merged = OnThisDayMerger.merge(wikiItems, wikidataItems)
+        if !merged.isEmpty {
+            return merged
+        }
+
+        if !wikiItems.isEmpty {
+            return wikiItems
+        }
+
+        let fallback = try await APIService.shared.fetch(
+            type: .births,
+            month: month,
+            day: day,
+            forceRefresh: forceRefresh
+        )
+        return fallback.items
     }
 
     private func storeAndApply(
         births: [OnThisDayItem],
         events: [OnThisDayItem],
         highlights: [OnThisDayItem],
+        deaths: [OnThisDayItem],
         month: Int,
         day: Int
     ) {
         cachedBirths = births
         cachedEvents = events
         cachedHighlights = highlights
+        cachedDeaths = deaths
         loadedMonth = month
         loadedDay = day
 
         birthCount = births.count
-        let selectedIDs = Set(highlights.map(\.id))
-        eventCount = highlights.count + events.filter { !selectedIDs.contains($0.id) }.count
         highlightCount = highlights.count
+        eventCount = uniqueHistoryCount(highlights: highlights, events: events, deaths: deaths)
 
         repickFeatured()
         syncWidgetSnapshot()
+    }
+
+    private func uniqueHistoryCount(
+        highlights: [OnThisDayItem],
+        events: [OnThisDayItem],
+        deaths: [OnThisDayItem]
+    ) -> Int {
+        var seen = Set<String>()
+        var count = 0
+        for item in highlights + events + deaths {
+            if seen.insert(item.id).inserted {
+                count += 1
+            }
+        }
+        return count
     }
 
     private func repickFeatured() {
@@ -155,9 +218,14 @@ final class TodayViewModel: ObservableObject {
     }
 
     private func eventPool() -> [OnThisDayItem] {
-        if cachedHighlights.isEmpty { return cachedEvents }
         let highlightIDs = Set(cachedHighlights.map(\.id))
-        return cachedHighlights + cachedEvents.filter { !highlightIDs.contains($0.id) }
+        let events = cachedEvents.filter { !highlightIDs.contains($0.id) }
+        let knownIDs = highlightIDs.union(events.map(\.id))
+        let deaths = cachedDeaths.filter { !knownIDs.contains($0.id) }
+        if cachedHighlights.isEmpty {
+            return cachedEvents + deaths
+        }
+        return cachedHighlights + events + deaths
     }
 
     private func syncWidgetSnapshot() {

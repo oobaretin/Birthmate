@@ -24,6 +24,20 @@ enum APIError: Error, LocalizedError {
 struct FeedCacheEntry: Codable {
     let items: [OnThisDayItem]
     let fetchedAt: Date
+    let isComplete: Bool
+
+    init(items: [OnThisDayItem], fetchedAt: Date, isComplete: Bool = true) {
+        self.items = items
+        self.fetchedAt = fetchedAt
+        self.isComplete = isComplete
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        items = try container.decode([OnThisDayItem].self, forKey: .items)
+        fetchedAt = try container.decode(Date.self, forKey: .fetchedAt)
+        isComplete = try container.decodeIfPresent(Bool.self, forKey: .isComplete) ?? true
+    }
 }
 
 final class APIService {

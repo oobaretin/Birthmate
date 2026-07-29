@@ -34,7 +34,9 @@ final class WikidataService {
         onPartialUpdate: (@Sendable ([OnThisDayItem]) -> Void)? = nil
     ) async throws -> FeedCacheEntry {
         let key = cacheKey(month: month, day: day)
-        if !forceRefresh, let cached = cachedBirths(month: month, day: day) {
+        if !forceRefresh,
+           let cached = cachedBirths(month: month, day: day),
+           cached.isComplete {
             return cached
         }
 
@@ -80,7 +82,7 @@ final class WikidataService {
         }
 
         let items = sortedItems(from: collected)
-        let entry = FeedCacheEntry(items: items, fetchedAt: Date())
+        let entry = FeedCacheEntry(items: items, fetchedAt: Date(), isComplete: true)
         memoryCache[key] = entry
         saveToDisk(entry, key: key)
         return entry
@@ -94,7 +96,7 @@ final class WikidataService {
 
     private func persistPartial(_ items: [OnThisDayItem], key: String) {
         guard !items.isEmpty else { return }
-        let entry = FeedCacheEntry(items: items, fetchedAt: Date())
+        let entry = FeedCacheEntry(items: items, fetchedAt: Date(), isComplete: false)
         memoryCache[key] = entry
         saveToDisk(entry, key: key)
     }

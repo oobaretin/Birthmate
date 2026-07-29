@@ -21,11 +21,11 @@ struct OnThisDayView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.isLoading && viewModel.allEvents.isEmpty && viewModel.allSelected.isEmpty {
+                if viewModel.isLoading && viewModel.allEvents.isEmpty && viewModel.allSelected.isEmpty && viewModel.allDeaths.isEmpty {
                     skeletonList
-                } else if let error = viewModel.errorMessage, viewModel.allEvents.isEmpty && viewModel.allSelected.isEmpty {
+                } else if let error = viewModel.errorMessage, viewModel.allEvents.isEmpty && viewModel.allSelected.isEmpty && viewModel.allDeaths.isEmpty {
                     FeedErrorView(message: error, retry: reload)
-                } else if viewModel.allEvents.isEmpty && viewModel.allSelected.isEmpty {
+                } else if viewModel.allEvents.isEmpty && viewModel.allSelected.isEmpty && viewModel.allDeaths.isEmpty {
                     FeedEmptyView(
                         title: "No Events Found",
                         systemImage: "clock.badge.questionmark",
@@ -94,7 +94,7 @@ struct OnThisDayView: View {
                     BirthdayBanner(month: month, day: day)
                 }
 
-                HStack(spacing: 16) {
+                HStack(spacing: 12) {
                     StatBadge(value: viewModel.totalCount, label: "Total", icon: "clock.fill")
                     StatBadge(value: viewModel.highlightCount, label: "Highlights", icon: "star.fill")
                     StatBadge(value: viewModel.allEvents.count, label: "Events", icon: "book.fill")

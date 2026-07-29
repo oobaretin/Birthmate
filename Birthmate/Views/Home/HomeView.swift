@@ -23,6 +23,13 @@ struct HomeView: View {
         displaySections.reduce(0) { $0 + $1.items.count }
     }
 
+    private var birthmatesSubtitle: String {
+        if viewModel.isLoadingMore {
+            return "\(viewModel.totalCount) birthmates on your day"
+        }
+        return "\(visibleCount) of \(viewModel.totalCount) on your day"
+    }
+
     var body: some View {
         NavigationStack {
             Group {
@@ -81,11 +88,11 @@ struct HomeView: View {
                     VStack(spacing: 2) {
                         Text("Birthmates")
                             .font(.headline)
-                        Text("\(visibleCount) of \(viewModel.totalCount) on your day")
+                        Text(birthmatesSubtitle)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         if viewModel.isLoadingMore {
-                            Text("Loading more…")
+                            Text("Finding more birthmates…")
                                 .font(.caption2)
                                 .foregroundStyle(BirthmateTheme.accent)
                         }

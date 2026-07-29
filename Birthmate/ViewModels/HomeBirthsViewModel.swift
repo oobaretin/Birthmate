@@ -23,48 +23,62 @@ final class HomeBirthsViewModel: ObservableObject {
         loadedMonth = month
         loadedDay = day
 
-        if let cached = WikidataService.shared.cachedBirths(month: month, day: day),
+        if !forceRefresh,
+           let cached = WikidataService.shared.cachedBirths(month: month, day: day),
+           cached.isComplete,
            !cached.items.isEmpty {
-            apply(cached.items)
+            let wikiItems = await fetchWikipediaBirths(month: month, day: day, forceRefresh: false) ?? []
+            apply(OnThisDayMerger.merge(cached.items, wikiItems))
             lastUpdated = cached.fetchedAt
+            return
         }
 
         isLoading = allItems.isEmpty
-        isLoadingMore = !allItems.isEmpty
+        isLoadingMore = false
 
-        do {
-            let fresh = try await WikidataService.shared.fetchBirths(
-                month: month,
-                day: day,
-                forceRefresh: forceRefresh
-            ) { [weak self] partial in
-                Task { @MainActor in
-                    self?.apply(partial)
-                    self?.isLoading = false
-                    self?.isLoadingMore = true
-                }
-            }
-            apply(fresh.items)
-            lastUpdated = fresh.fetchedAt
-        } catch {
-            await loadWikipediaFallback(month: month, day: day)
+        async let wikiItemsTask = fetchWikipediaBirths(month: month, day: day, forceRefresh: forceRefresh)
+        async let wikidataItemsTask = fetchWikidataBirths(month: month, day: day, forceRefresh: forceRefresh)
+
+        let wikiItems = await wikiItemsTask ?? []
+        if allItems.isEmpty, !wikiItems.isEmpty {
+            apply(wikiItems)
+            isLoading = false
+            isLoadingMore = true
+        }
+
+        let wikidataItems = await wikidataItemsTask ?? []
+        let merged = OnThisDayMerger.merge(wikiItems, wikidataItems)
+
+        if !merged.isEmpty {
+            apply(merged)
+            lastUpdated = Date()
+        } else if allItems.isEmpty {
+            errorMessage = "Couldn't load birthmates. Check your connection and try again."
+            sections = []
         }
 
         isLoading = false
         isLoadingMore = false
     }
 
-    private func loadWikipediaFallback(month: Int, day: Int) async {
-        do {
-            let fallback = try await APIService.shared.fetch(type: .births, month: month, day: day, forceRefresh: true)
-            apply(fallback.items)
-            lastUpdated = fallback.fetchedAt
-        } catch {
-            if allItems.isEmpty {
-                errorMessage = error.localizedDescription
-                sections = []
-            }
-        }
+    private func fetchWikipediaBirths(month: Int, day: Int, forceRefresh: Bool) async -> [OnThisDayItem]? {
+        guard let entry = try? await APIService.shared.fetch(
+            type: .births,
+            month: month,
+            day: day,
+            forceRefresh: forceRefresh
+        ) else { return nil }
+        return entry.items
+    }
+
+    private func fetchWikidataBirths(month: Int, day: Int, forceRefresh: Bool) async -> [OnThisDayItem]? {
+        guard let entry = try? await WikidataService.shared.fetchBirths(
+            month: month,
+            day: day,
+            forceRefresh: forceRefresh,
+            onPartialUpdate: nil
+        ) else { return nil }
+        return entry.items
     }
 
     func filteredItems(matching searchText: String, favoriteWikiTitles: Set<String> = []) -> [OnThisDayItem] {
