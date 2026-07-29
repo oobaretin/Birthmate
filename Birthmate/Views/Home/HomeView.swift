@@ -75,13 +75,9 @@ struct HomeView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         if viewModel.isLoadingMore {
-                            Text("Loading more from Wikidata…")
+                            Text("Loading more…")
                                 .font(.caption2)
                                 .foregroundStyle(BirthmateTheme.accent)
-                        } else {
-                            Text("Source: \(viewModel.dataSourceLabel)")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
                         }
                     }
                 }

@@ -8,7 +8,6 @@ final class HomeBirthsViewModel: ObservableObject {
     @Published var isLoadingMore = false
     @Published var errorMessage: String?
     @Published var lastUpdated: Date?
-    @Published var dataSourceLabel = "Wikidata"
     @Published var filter: BirthFilter = .all {
         didSet { rebuildSections() }
     }
@@ -47,7 +46,6 @@ final class HomeBirthsViewModel: ObservableObject {
             }
             apply(fresh.items)
             lastUpdated = fresh.fetchedAt
-            dataSourceLabel = "Wikidata"
         } catch {
             await loadWikipediaFallback(month: month, day: day)
         }
@@ -61,7 +59,6 @@ final class HomeBirthsViewModel: ObservableObject {
             let fallback = try await APIService.shared.fetch(type: .births, month: month, day: day, forceRefresh: true)
             apply(fallback.items)
             lastUpdated = fallback.fetchedAt
-            dataSourceLabel = "Wikipedia"
         } catch {
             if allItems.isEmpty {
                 errorMessage = error.localizedDescription
