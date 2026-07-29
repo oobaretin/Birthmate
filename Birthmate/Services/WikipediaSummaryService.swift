@@ -20,6 +20,11 @@ final class WikipediaSummaryService {
         return WikiImageURL.resolved(summary.thumbnail?.source)
     }
 
+    func fetchThumbnailURL(title: String) async -> String? {
+        guard let summary = await fetchSummary(title: title) else { return nil }
+        return WikiImageURL.resolved(summary.thumbnail?.source)
+    }
+
     private func wikipediaTitle(for item: OnThisDayItem) -> String? {
         if let title = item.primaryPage?.title, !title.isEmpty { return title }
         guard let urlString = item.primaryPage?.contentUrls?.desktop?.page,
@@ -28,8 +33,7 @@ final class WikipediaSummaryService {
     }
 
     private func fetchSummary(title: String) async -> WikipediaSummary? {
-        let pathTitle = title.removingPercentEncoding ?? title
-        guard let encoded = pathTitle.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+        guard let encoded = WikipediaTitleEncoding.apiPath(for: title),
               let summaryURL = URL(string: "https://en.wikipedia.org/api/rest_v1/page/summary/\(encoded)") else {
             return nil
         }
@@ -47,6 +51,16 @@ final class WikipediaSummaryService {
         } catch {
             return nil
         }
+    }
+}
+
+enum WikipediaTitleEncoding {
+    static func apiPath(for title: String) -> String? {
+        let decoded = title.removingPercentEncoding ?? title
+        let normalized = decoded.replacingOccurrences(of: " ", with: "_")
+        var allowed = CharacterSet.urlPathAllowed
+        allowed.remove(charactersIn: "/")
+        return normalized.addingPercentEncoding(withAllowedCharacters: allowed)
     }
 }
 

@@ -1,8 +1,8 @@
 import SwiftUI
 
 enum WikiImageLoader {
-    static func load(from urlString: String?) async -> UIImage? {
-        guard let resolved = WikiImageURL.resolved(urlString),
+    static func load(from urlString: String?, width: Int = 330) async -> UIImage? {
+        guard let resolved = WikiImageURL.resolved(urlString, width: width),
               let url = WikiImageURL.url(from: resolved) else { return nil }
 
         var request = URLRequest(url: url)
@@ -20,51 +20,58 @@ enum WikiImageLoader {
     }
 }
 
+actor WikiPersonImageService {
+    static let shared = WikiPersonImageService()
+
+    private var cache: [String: UIImage] = [:]
+
+    func image(primaryURL: String?, wikiTitle: String?, width: Int = 330) async -> UIImage? {
+        let cacheKey = "\(primaryURL ?? "")|\(wikiTitle ?? "")|\(width)"
+        if let cached = cache[cacheKey] { return cached }
+
+        if let primaryURL,
+           let loaded = await WikiImageLoader.load(from: primaryURL, width: width) {
+            cache[cacheKey] = loaded
+            return loaded
+        }
+
+        if let wikiTitle,
+           let thumbURL = await WikipediaSummaryService.shared.fetchThumbnailURL(title: wikiTitle),
+           let loaded = await WikiImageLoader.load(from: thumbURL, width: width) {
+            cache[cacheKey] = loaded
+            return loaded
+        }
+
+        return nil
+    }
+}
+
 struct PersonThumbnailView: View {
     let urlString: String?
     var wikiTitle: String?
     var size: CGFloat = 56
 
-    @State private var fallbackImage: UIImage?
+    @State private var image: UIImage?
 
-    private var resolvedURL: URL? {
-        guard let resolved = WikiImageURL.resolved(urlString) else { return nil }
-        return WikiImageURL.url(from: resolved)
+    private var loadKey: String {
+        "\(urlString ?? "")|\(wikiTitle ?? "")"
     }
 
     var body: some View {
         Group {
-            if let fallbackImage {
-                imageView(Image(uiImage: fallbackImage))
-            } else if let resolvedURL {
-                AsyncImage(url: resolvedURL) { phase in
-                    switch phase {
-                    case .success(let image):
-                        imageView(image)
-                    case .failure:
-                        placeholder
-                    case .empty:
-                        placeholder
-                    @unknown default:
-                        placeholder
-                    }
-                }
+            if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: size, height: size)
+                    .clipShape(Circle())
             } else {
                 placeholder
             }
         }
-        .onAppear {
-            guard resolvedURL == nil, fallbackImage == nil, let wikiTitle else { return }
-            Task { await loadFallback(title: wikiTitle) }
+        .task(id: loadKey) {
+            await loadImage()
         }
-    }
-
-    private func imageView(_ image: Image) -> some View {
-        image
-            .resizable()
-            .scaledToFill()
-            .frame(width: size, height: size)
-            .clipShape(Circle())
     }
 
     private var placeholder: some View {
@@ -77,22 +84,14 @@ struct PersonThumbnailView: View {
             .frame(width: size, height: size)
     }
 
-    private func loadFallback(title: String) async {
-        let item = OnThisDayItem(
-            text: title,
-            year: nil,
-            pages: [WikiPage(
-                title: title,
-                displayTitle: title,
-                extract: nil,
-                thumbnail: nil,
-                originalImage: nil,
-                contentUrls: nil
-            )]
+    private func loadImage() async {
+        image = nil
+        let loaded = await WikiPersonImageService.shared.image(
+            primaryURL: urlString,
+            wikiTitle: wikiTitle,
+            width: 330
         )
-        guard let fallbackURL = await WikipediaSummaryService.shared.fetchThumbnailURL(for: item),
-              let loaded = await WikiImageLoader.load(from: fallbackURL) else { return }
-        await MainActor.run { fallbackImage = loaded }
+        await MainActor.run { image = loaded }
     }
 }
 
@@ -100,47 +99,27 @@ struct PersonHeroImageView: View {
     let urlString: String?
     var wikiTitle: String?
 
-    @State private var fallbackImage: UIImage?
+    @State private var image: UIImage?
 
-    private var resolvedURL: URL? {
-        if let wide = WikiImageURL.resolved(urlString, width: 800),
-           let url = WikiImageURL.url(from: wide) {
-            return url
-        }
-        guard let resolved = WikiImageURL.resolved(urlString) else { return nil }
-        return WikiImageURL.url(from: resolved)
+    private var loadKey: String {
+        "\(urlString ?? "")|\(wikiTitle ?? "")"
     }
 
     var body: some View {
         Group {
-            if let fallbackImage {
-                Image(uiImage: fallbackImage)
+            if let image {
+                Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: .infinity)
                     .frame(height: 260)
                     .clipped()
-            } else if let resolvedURL {
-                AsyncImage(url: resolvedURL) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 260)
-                            .clipped()
-                    default:
-                        heroPlaceholder
-                    }
-                }
             } else {
                 heroPlaceholder
             }
         }
-        .onAppear {
-            guard resolvedURL == nil, fallbackImage == nil, let wikiTitle else { return }
-            Task { await loadFallback(title: wikiTitle) }
+        .task(id: loadKey) {
+            await loadImage()
         }
     }
 
@@ -155,22 +134,14 @@ struct PersonHeroImageView: View {
             )
     }
 
-    private func loadFallback(title: String) async {
-        let item = OnThisDayItem(
-            text: title,
-            year: nil,
-            pages: [WikiPage(
-                title: title,
-                displayTitle: title,
-                extract: nil,
-                thumbnail: nil,
-                originalImage: nil,
-                contentUrls: nil
-            )]
+    private func loadImage() async {
+        image = nil
+        let loaded = await WikiPersonImageService.shared.image(
+            primaryURL: urlString,
+            wikiTitle: wikiTitle,
+            width: 800
         )
-        guard let fallbackURL = await WikipediaSummaryService.shared.fetchThumbnailURL(for: item),
-              let loaded = await WikiImageLoader.load(from: fallbackURL) else { return }
-        await MainActor.run { fallbackImage = loaded }
+        await MainActor.run { image = loaded }
     }
 }
 

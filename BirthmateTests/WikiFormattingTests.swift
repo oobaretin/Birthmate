@@ -47,4 +47,9 @@ final class WikiFormattingTests: XCTestCase {
         let raw = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Macaulay_Culkin.jpg/330px-Macaulay_Culkin.jpg"
         XCTAssertEqual(WikiImageURL.resolved(raw), raw)
     }
+
+    func testWikipediaTitleEncodingUsesUnderscores() {
+        let encoded = WikipediaTitleEncoding.apiPath(for: "Patrick Williams (basketball)")
+        XCTAssertEqual(encoded, "Patrick_Williams_(basketball)")
+    }
 }
