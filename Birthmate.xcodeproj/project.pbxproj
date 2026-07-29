@@ -1,0 +1,737 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04075CB1702D35C993AD2276 /* OnThisDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D18094B8FFFADF0FC4F1B85 /* OnThisDayView.swift */; };
+		099633A764674F73DC589722 /* BirthmateWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E64767C4E80E6D2A1051F19 /* BirthmateWidget.swift */; };
+		122BC28BA51142D63F14810B /* BirthmateWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11639706E874B1223D0383A9 /* BirthmateWidgetBundle.swift */; };
+		18F8693BD042EC653DC3D920 /* WikidataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A459B92FFED244A8B0C176D /* WikidataService.swift */; };
+		1FF950375E10ADDE6DB29D32 /* AppGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4119085DFABD3C095C497B1 /* AppGroupStorage.swift */; };
+		22B960FA58C5A33CACD3B620 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DFF34CE3D550DEFDDED617 /* APIService.swift */; };
+		2A08DF5A0F4A4BA7652FD656 /* WikiFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A04B57F05944866DDD33149 /* WikiFormattingTests.swift */; };
+		34AC489E14CF12857AD23402 /* FeedStateViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */; };
+		442342446F711353882EB283 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7D4398F79FC5906A830825 /* NotificationManager.swift */; };
+		531FF348C43F8D6AB84692B7 /* BirthPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB768B1F65CE42F4EBE29A /* BirthPerson.swift */; };
+		5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC49677A19F1BEDEFB4902E /* MainTabView.swift */; };
+		654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */; };
+		6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */; };
+		826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */; };
+		85653F834D575790906083ED /* BirthmateWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		90ED68DE3173181AEB9DA725 /* WikidataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39FF4C3DE185AD1259AB3D /* WikidataModels.swift */; };
+		9CCD0587B0B1D2F2FD8754CB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA6236ED332846BF22747FF /* HomeView.swift */; };
+		9EEFA48F861A63386ABB99ED /* BirthmateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB07D5742739E3C1BED6B5B /* BirthmateApp.swift */; };
+		BAA3419A6199DE8919615146 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128B2C40BA9A1EA1E91A7E4B /* RootView.swift */; };
+		BEDBC286F7DAF42DDD1BBBCB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C559AB509CD4323930C8A094 /* Assets.xcassets */; };
+		C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */; };
+		C6E3943ABEB2377806161435 /* AppGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4119085DFABD3C095C497B1 /* AppGroupStorage.swift */; };
+		C702026F10675611C1CBFE9D /* WikipediaSummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */; };
+		CDDC97669FDDB2AB1524C57B /* BirthmateTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */; };
+		EA93D5C98B9F4C814E801D04 /* OnThisDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF78FDC11F5A610DE35A8F1 /* OnThisDayViewModel.swift */; };
+		EF50AF8FDC49274D60BCF39A /* OnThisDayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CCA94D2EFB2A33089F71B4 /* OnThisDayModels.swift */; };
+		F687876B0B39075DE19B5436 /* BirthdateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989E155311C63C4C24FF2853 /* BirthdateStore.swift */; };
+		F91471A1799739AF59BBF5F6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F767B3E7EB7E33E2A38BFD /* SettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		46BA29D52E68F8CB6F66D159 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9D9ED58EDF5F04662A9AB33 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B9B4D7E6DEE07F9705C24511;
+			remoteInfo = Birthmate;
+		};
+		E0D19F50C570CB7794C162E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9D9ED58EDF5F04662A9AB33 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 08342DB4B78DFBD1E7AB3AE7;
+			remoteInfo = BirthmateWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5E2E7101B3099153FC54990C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85653F834D575790906083ED /* BirthmateWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		11639706E874B1223D0383A9 /* BirthmateWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateWidgetBundle.swift; sourceTree = "<group>"; };
+		128B2C40BA9A1EA1E91A7E4B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		1AF78FDC11F5A610DE35A8F1 /* OnThisDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnThisDayViewModel.swift; sourceTree = "<group>"; };
+		1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBirthsViewModel.swift; sourceTree = "<group>"; };
+		1DB07D5742739E3C1BED6B5B /* BirthmateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateApp.swift; sourceTree = "<group>"; };
+		35DB768B1F65CE42F4EBE29A /* BirthPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthPerson.swift; sourceTree = "<group>"; };
+		3B39FF4C3DE185AD1259AB3D /* WikidataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikidataModels.swift; sourceTree = "<group>"; };
+		3D18094B8FFFADF0FC4F1B85 /* OnThisDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnThisDayView.swift; sourceTree = "<group>"; };
+		3E7D4398F79FC5906A830825 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		4A04B57F05944866DDD33149 /* WikiFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiFormattingTests.swift; sourceTree = "<group>"; };
+		60F767B3E7EB7E33E2A38BFD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		717668A48EE6A60FBE0F317E /* BirthmateWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BirthmateWidget.entitlements; sourceTree = "<group>"; };
+		71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatting.swift; sourceTree = "<group>"; };
+		8A31FD1D19D69490250C1610 /* Birthmate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Birthmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AC49677A19F1BEDEFB4902E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateTheme.swift; sourceTree = "<group>"; };
+		95CCA94D2EFB2A33089F71B4 /* OnThisDayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnThisDayModels.swift; sourceTree = "<group>"; };
+		97DFF34CE3D550DEFDDED617 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		989E155311C63C4C24FF2853 /* BirthdateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdateStore.swift; sourceTree = "<group>"; };
+		9A459B92FFED244A8B0C176D /* WikidataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikidataService.swift; sourceTree = "<group>"; };
+		9BA6236ED332846BF22747FF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		9E64767C4E80E6D2A1051F19 /* BirthmateWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateWidget.swift; sourceTree = "<group>"; };
+		AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaSummaryService.swift; sourceTree = "<group>"; };
+		B887D7305AF7BEA944CCF5C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = BirthmateWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStateViews.swift; sourceTree = "<group>"; };
+		C3B15298EEF391F1F1BF593C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C559AB509CD4323930C8A094 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		DEC01496396EE666DCA1E5C9 /* Birthmate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Birthmate.entitlements; sourceTree = "<group>"; };
+		E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayBanner.swift; sourceTree = "<group>"; };
+		E4119085DFABD3C095C497B1 /* AppGroupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupStorage.swift; sourceTree = "<group>"; };
+		F0E35619C8AE33DBEC830C9D /* BirthmateTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BirthmateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0C15BD156CD25FCDDD07AB26 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */,
+				1AF78FDC11F5A610DE35A8F1 /* OnThisDayViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		12EF794F156E224D553F91A6 /* Birthmate */ = {
+			isa = PBXGroup;
+			children = (
+				DEC01496396EE666DCA1E5C9 /* Birthmate.entitlements */,
+				6935D4F1C4136D3197756A6E /* App */,
+				E041B8F065EAC210095D599E /* Models */,
+				D2783678B8A83FFA47A40ADA /* Resources */,
+				73C4C9F0CEB50F96FD5D440B /* Services */,
+				644EF5E8DD69BCB9A33D8216 /* Utilities */,
+				0C15BD156CD25FCDDD07AB26 /* ViewModels */,
+				3B04A83879112D782327CE93 /* Views */,
+			);
+			path = Birthmate;
+			sourceTree = "<group>";
+		};
+		3B04A83879112D782327CE93 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				578604DBD01A6E4CBAA3435B /* Home */,
+				FDCF407814D5813E46B0EA0C /* Onboarding */,
+				B6C1278404182828DD6DD765 /* OnThisDay */,
+				D58F22167D4F25D37E942730 /* Settings */,
+				853359655F8B9404194AF1CB /* Shared */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		40DE085B4272C221F82E8882 = {
+			isa = PBXGroup;
+			children = (
+				12EF794F156E224D553F91A6 /* Birthmate */,
+				69598CE94FAF7D4895A6ED37 /* BirthmateShared */,
+				FE9BCE3B6527682C7ECC251E /* BirthmateTests */,
+				4BE1C6B649103F5AC71D164A /* BirthmateWidget */,
+				501497093F674157964A5FFD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4BE1C6B649103F5AC71D164A /* BirthmateWidget */ = {
+			isa = PBXGroup;
+			children = (
+				717668A48EE6A60FBE0F317E /* BirthmateWidget.entitlements */,
+				9E64767C4E80E6D2A1051F19 /* BirthmateWidget.swift */,
+				11639706E874B1223D0383A9 /* BirthmateWidgetBundle.swift */,
+				C3B15298EEF391F1F1BF593C /* Info.plist */,
+			);
+			path = BirthmateWidget;
+			sourceTree = "<group>";
+		};
+		501497093F674157964A5FFD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A31FD1D19D69490250C1610 /* Birthmate.app */,
+				F0E35619C8AE33DBEC830C9D /* BirthmateTests.xctest */,
+				BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		578604DBD01A6E4CBAA3435B /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				9BA6236ED332846BF22747FF /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		644EF5E8DD69BCB9A33D8216 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6935D4F1C4136D3197756A6E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1DB07D5742739E3C1BED6B5B /* BirthmateApp.swift */,
+				8AC49677A19F1BEDEFB4902E /* MainTabView.swift */,
+				128B2C40BA9A1EA1E91A7E4B /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		69598CE94FAF7D4895A6ED37 /* BirthmateShared */ = {
+			isa = PBXGroup;
+			children = (
+				E4119085DFABD3C095C497B1 /* AppGroupStorage.swift */,
+			);
+			path = BirthmateShared;
+			sourceTree = "<group>";
+		};
+		73C4C9F0CEB50F96FD5D440B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				97DFF34CE3D550DEFDDED617 /* APIService.swift */,
+				989E155311C63C4C24FF2853 /* BirthdateStore.swift */,
+				3E7D4398F79FC5906A830825 /* NotificationManager.swift */,
+				9A459B92FFED244A8B0C176D /* WikidataService.swift */,
+				AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		853359655F8B9404194AF1CB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */,
+				949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */,
+				C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		B6C1278404182828DD6DD765 /* OnThisDay */ = {
+			isa = PBXGroup;
+			children = (
+				3D18094B8FFFADF0FC4F1B85 /* OnThisDayView.swift */,
+			);
+			path = OnThisDay;
+			sourceTree = "<group>";
+		};
+		D2783678B8A83FFA47A40ADA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C559AB509CD4323930C8A094 /* Assets.xcassets */,
+				B887D7305AF7BEA944CCF5C7 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D58F22167D4F25D37E942730 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				60F767B3E7EB7E33E2A38BFD /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E041B8F065EAC210095D599E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				35DB768B1F65CE42F4EBE29A /* BirthPerson.swift */,
+				95CCA94D2EFB2A33089F71B4 /* OnThisDayModels.swift */,
+				3B39FF4C3DE185AD1259AB3D /* WikidataModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FDCF407814D5813E46B0EA0C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		FE9BCE3B6527682C7ECC251E /* BirthmateTests */ = {
+			isa = PBXGroup;
+			children = (
+				4A04B57F05944866DDD33149 /* WikiFormattingTests.swift */,
+			);
+			path = BirthmateTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		08342DB4B78DFBD1E7AB3AE7 /* BirthmateWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A445112EECA4576E594B679 /* Build configuration list for PBXNativeTarget "BirthmateWidgetExtension" */;
+			buildPhases = (
+				6B9E61D8915ABF7AD14764F5 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BirthmateWidgetExtension;
+			productName = BirthmateWidgetExtension;
+			productReference = BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		960F73074EE87823F3C9CDDF /* BirthmateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFFEFB25D72E6F91E6DFFC1D /* Build configuration list for PBXNativeTarget "BirthmateTests" */;
+			buildPhases = (
+				978D35DD70873132DD793D5F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C0FACAC9DCED4AD77CC2C53B /* PBXTargetDependency */,
+			);
+			name = BirthmateTests;
+			productName = BirthmateTests;
+			productReference = F0E35619C8AE33DBEC830C9D /* BirthmateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B9B4D7E6DEE07F9705C24511 /* Birthmate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0398DDFF4D45D56099C0A96 /* Build configuration list for PBXNativeTarget "Birthmate" */;
+			buildPhases = (
+				AD2B0028C0D59D3E0DA498D4 /* Sources */,
+				ABA5A05B99A9A841B9B5A345 /* Resources */,
+				5E2E7101B3099153FC54990C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5E0E333023874682BD791464 /* PBXTargetDependency */,
+			);
+			name = Birthmate;
+			productName = Birthmate;
+			productReference = 8A31FD1D19D69490250C1610 /* Birthmate.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9D9ED58EDF5F04662A9AB33 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					08342DB4B78DFBD1E7AB3AE7 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					B9B4D7E6DEE07F9705C24511 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = AC94E136B3548CFAF0F4E540 /* Build configuration list for PBXProject "Birthmate" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 40DE085B4272C221F82E8882;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B9B4D7E6DEE07F9705C24511 /* Birthmate */,
+				960F73074EE87823F3C9CDDF /* BirthmateTests */,
+				08342DB4B78DFBD1E7AB3AE7 /* BirthmateWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ABA5A05B99A9A841B9B5A345 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEDBC286F7DAF42DDD1BBBCB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6B9E61D8915ABF7AD14764F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6E3943ABEB2377806161435 /* AppGroupStorage.swift in Sources */,
+				099633A764674F73DC589722 /* BirthmateWidget.swift in Sources */,
+				122BC28BA51142D63F14810B /* BirthmateWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		978D35DD70873132DD793D5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A08DF5A0F4A4BA7652FD656 /* WikiFormattingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD2B0028C0D59D3E0DA498D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B960FA58C5A33CACD3B620 /* APIService.swift in Sources */,
+				1FF950375E10ADDE6DB29D32 /* AppGroupStorage.swift in Sources */,
+				531FF348C43F8D6AB84692B7 /* BirthPerson.swift in Sources */,
+				F687876B0B39075DE19B5436 /* BirthdateStore.swift in Sources */,
+				826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */,
+				9EEFA48F861A63386ABB99ED /* BirthmateApp.swift in Sources */,
+				CDDC97669FDDB2AB1524C57B /* BirthmateTheme.swift in Sources */,
+				654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */,
+				34AC489E14CF12857AD23402 /* FeedStateViews.swift in Sources */,
+				6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */,
+				9CCD0587B0B1D2F2FD8754CB /* HomeView.swift in Sources */,
+				5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */,
+				442342446F711353882EB283 /* NotificationManager.swift in Sources */,
+				EF50AF8FDC49274D60BCF39A /* OnThisDayModels.swift in Sources */,
+				04075CB1702D35C993AD2276 /* OnThisDayView.swift in Sources */,
+				EA93D5C98B9F4C814E801D04 /* OnThisDayViewModel.swift in Sources */,
+				C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */,
+				BAA3419A6199DE8919615146 /* RootView.swift in Sources */,
+				F91471A1799739AF59BBF5F6 /* SettingsView.swift in Sources */,
+				90ED68DE3173181AEB9DA725 /* WikidataModels.swift in Sources */,
+				18F8693BD042EC653DC3D920 /* WikidataService.swift in Sources */,
+				C702026F10675611C1CBFE9D /* WikipediaSummaryService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5E0E333023874682BD791464 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 08342DB4B78DFBD1E7AB3AE7 /* BirthmateWidgetExtension */;
+			targetProxy = E0D19F50C570CB7794C162E8 /* PBXContainerItemProxy */;
+		};
+		C0FACAC9DCED4AD77CC2C53B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B9B4D7E6DEE07F9705C24511 /* Birthmate */;
+			targetProxy = 46BA29D52E68F8CB6F66D159 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		535E6E07497E91FC54AB1E2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		66FF4D78E69A09FC9F3C22DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.birthmate.BirthmateTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Birthmate.app/Birthmate";
+			};
+			name = Debug;
+		};
+		75D7186F4B70961A0DABA534 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		97AF2610EF5FAF830EE5C2C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BirthmateWidget/BirthmateWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BirthmateWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Birthmate Widget";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.birthmate.app.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B0D98C0E79A19E53DBEEE255 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Birthmate/Birthmate.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Birthmate/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Birthmate;
+				INFOPLIST_KEY_NSUserNotificationsUsageDescription = "Birthmate sends a daily reminder to explore your birthday feed.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.birthmate.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C50B2838C4D850F9762102ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BirthmateWidget/BirthmateWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BirthmateWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Birthmate Widget";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.birthmate.app.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D293BEC6AEF496DBD45845E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.birthmate.BirthmateTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Birthmate.app/Birthmate";
+			};
+			name = Release;
+		};
+		DD0696C38C0B3E228A75D8AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Birthmate/Birthmate.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Birthmate/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Birthmate;
+				INFOPLIST_KEY_NSUserNotificationsUsageDescription = "Birthmate sends a daily reminder to explore your birthday feed.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.birthmate.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9A445112EECA4576E594B679 /* Build configuration list for PBXNativeTarget "BirthmateWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				97AF2610EF5FAF830EE5C2C1 /* Debug */,
+				C50B2838C4D850F9762102ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AC94E136B3548CFAF0F4E540 /* Build configuration list for PBXProject "Birthmate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				535E6E07497E91FC54AB1E2E /* Debug */,
+				75D7186F4B70961A0DABA534 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AFFEFB25D72E6F91E6DFFC1D /* Build configuration list for PBXNativeTarget "BirthmateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66FF4D78E69A09FC9F3C22DF /* Debug */,
+				D293BEC6AEF496DBD45845E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C0398DDFF4D45D56099C0A96 /* Build configuration list for PBXNativeTarget "Birthmate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD0696C38C0B3E228A75D8AB /* Debug */,
+				B0D98C0E79A19E53DBEEE255 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C9D9ED58EDF5F04662A9AB33 /* Project object */;
+}

@@ -1,0 +1,283 @@
+import SwiftUI
+
+struct HomeView: View {
+    @EnvironmentObject var birthdateStore: BirthdateStore
+    @StateObject private var viewModel = HomeBirthsViewModel()
+    @State private var searchText = ""
+    @State private var randomPerson: OnThisDayItem?
+
+    private var formattedDate: String {
+        guard let month = birthdateStore.month, let day = birthdateStore.day else { return "" }
+        return DateFormatting.birthdate(month: month, day: day)
+    }
+
+    private var displaySections: [BirthSection] {
+        viewModel.filteredSections(matching: searchText)
+    }
+
+    private var visibleCount: Int {
+        displaySections.reduce(0) { $0 + $1.items.count }
+    }
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if viewModel.isLoading && viewModel.allItems.isEmpty {
+                    skeletonList
+                } else if let error = viewModel.errorMessage, viewModel.allItems.isEmpty {
+                    FeedErrorView(message: error) { await reload(force: true) }
+                } else if viewModel.allItems.isEmpty {
+                    FeedEmptyView(
+                        title: "No Results",
+                        systemImage: "person.crop.circle.badge.questionmark",
+                        message: "No births with a recorded year were found for this date."
+                    )
+                } else if visibleCount == 0 {
+                    FeedEmptyView(
+                        title: "No Matches",
+                        systemImage: "magnifyingglass",
+                        message: "Try a different name, keyword, or filter."
+                    )
+                } else {
+                    List {
+                        summaryHeader
+
+                        ForEach(displaySections) { section in
+                            Section {
+                                ForEach(section.items) { item in
+                                    NavigationLink(value: item) {
+                                        PersonRow(item: item)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            } header: {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(section.title)
+                                    Text(section.subtitle)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+                    .listStyle(.insetGrouped)
+                    .refreshable { await reload(force: true) }
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    VStack(spacing: 2) {
+                        Text("Born On Your Day")
+                            .font(.headline)
+                        Text("\(visibleCount) of \(viewModel.totalCount) people")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        if viewModel.isLoadingMore {
+                            Text("Loading more from Wikidata…")
+                                .font(.caption2)
+                                .foregroundStyle(BirthmateTheme.accent)
+                        } else {
+                            Text("Source: \(viewModel.dataSourceLabel)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .searchable(text: $searchText, prompt: "Search by name")
+            .navigationDestination(for: OnThisDayItem.self) { item in
+                PersonDetailView(item: item, dateLabel: formattedDate)
+            }
+            .sheet(item: $randomPerson) { person in
+                NavigationStack {
+                    PersonDetailView(item: person, dateLabel: formattedDate)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { randomPerson = nil }
+                            }
+                        }
+                }
+            }
+        }
+        .task { await reload() }
+    }
+
+    private var summaryHeader: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 12) {
+                if let month = birthdateStore.month, let day = birthdateStore.day {
+                    BirthdayBanner(month: month, day: day)
+                }
+
+                HStack(spacing: 16) {
+                    StatBadge(value: viewModel.totalCount, label: "Total", icon: "person.2.fill")
+                    StatBadge(value: viewModel.livingCount, label: "Living", icon: "heart.fill")
+                    StatBadge(
+                        value: viewModel.totalCount - viewModel.livingCount,
+                        label: "Historical",
+                        icon: "book.fill"
+                    )
+                }
+
+                Picker("Filter", selection: $viewModel.filter) {
+                    ForEach(BirthFilter.allCases) { option in
+                        Text(option.rawValue).tag(option)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                Button {
+                    randomPerson = viewModel.allItems.randomElement()
+                } label: {
+                    Label("Random Birthmate", systemImage: "dice.fill")
+                        .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .tint(BirthmateTheme.accent)
+
+                LastUpdatedLabel(date: viewModel.lastUpdated)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    private var skeletonList: some View {
+        List(0..<8, id: \.self) { _ in
+            SkeletonPersonRow()
+        }
+        .listStyle(.insetGrouped)
+        .redacted(reason: .placeholder)
+    }
+
+    private func reload(force: Bool = false) async {
+        guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
+        await viewModel.load(month: month, day: day, forceRefresh: force)
+    }
+}
+
+struct PersonRow: View {
+    let item: OnThisDayItem
+
+    private var snippet: String {
+        if let extract = item.primaryPage?.extract, !extract.isEmpty {
+            return WikiFormatting.plainText(from: extract)
+        }
+        let parts = item.text.components(separatedBy: ",")
+        return parts.dropFirst().joined(separator: ",").trimmingCharacters(in: .whitespaces)
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            PersonThumbnailView(
+                urlString: item.primaryPage?.thumbnail?.source,
+                wikiTitle: item.primaryPage?.title
+            )
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
+                    Text(item.displayName)
+                        .font(.headline)
+                        .lineLimit(2)
+
+                    if item.isLiving {
+                        Text("Living")
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(BirthmateTheme.accent.opacity(0.15))
+                            .foregroundStyle(BirthmateTheme.accent)
+                            .clipShape(Capsule())
+                    }
+                }
+
+                if let year = item.birthYear {
+                    Text("Born \(String(year))")
+                        .font(.subheadline)
+                        .foregroundStyle(BirthmateTheme.accent)
+                }
+
+                if !snippet.isEmpty {
+                    Text(snippet)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+struct PersonDetailView: View {
+    let item: OnThisDayItem
+    let dateLabel: String
+    @State private var loadedExtract: String?
+
+    private var bodyText: String {
+        if let loadedExtract { return loadedExtract }
+        if let extract = item.primaryPage?.extract, !extract.isEmpty {
+            return WikiFormatting.plainText(from: extract)
+        }
+        return WikiFormatting.plainText(from: item.text)
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                PersonHeroImageView(
+                    urlString: item.primaryPage?.originalImage?.source ?? item.primaryPage?.thumbnail?.source,
+                    wikiTitle: item.primaryPage?.title
+                )
+
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(spacing: 8) {
+                        if let year = item.birthYear {
+                            Text("Born \(String(year))")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(BirthmateTheme.accent)
+                        }
+                        if item.isLiving {
+                            Label("Living", systemImage: "heart.fill")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(BirthmateTheme.accent)
+                        }
+                    }
+
+                    Text(item.displayName)
+                        .font(.title.bold())
+
+                    Text(bodyText)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    ShareLink(item: WikiFormatting.shareText(for: item, dateLabel: dateLabel, isBirth: true)) {
+                        Label("Share your Birthmate", systemImage: "square.and.arrow.up")
+                            .font(.subheadline.weight(.medium))
+                    }
+
+                    if let urlString = item.primaryPage?.contentUrls?.desktop?.page,
+                       let url = URL(string: urlString) {
+                        Link(destination: url) {
+                            Label("Read more on Wikipedia", systemImage: "arrow.up.right.square")
+                                .font(.subheadline.weight(.medium))
+                        }
+                    }
+                }
+                .padding()
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            if item.primaryPage?.extract == nil {
+                loadedExtract = await WikipediaSummaryService.shared.fetchExtract(for: item)
+            }
+        }
+    }
+}
+
+#Preview {
+    HomeView().environmentObject(BirthdateStore())
+}
