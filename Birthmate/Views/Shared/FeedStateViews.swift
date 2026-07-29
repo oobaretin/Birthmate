@@ -1,31 +1,21 @@
 import SwiftUI
 
 enum WikiImageLoader {
-    static func load(from urlString: String?) async -> (UIImage?, String) {
-        guard let resolved = WikiImageURL.resolved(urlString) else {
-            return (nil, "resolve_nil")
-        }
-        guard let url = WikiImageURL.url(from: resolved) else {
-            return (nil, "url_parse_failed:\(resolved.prefix(80))")
-        }
+    static func load(from urlString: String?) async -> UIImage? {
+        guard let resolved = WikiImageURL.resolved(urlString),
+              let url = WikiImageURL.url(from: resolved) else { return nil }
 
         var request = URLRequest(url: url)
         request.setValue("Birthmate/1.0 (iOS app; contact: github.com/oobaretin/Birthmate)", forHTTPHeaderField: "User-Agent")
 
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            guard let http = response as? HTTPURLResponse else {
-                return (nil, "no_http_response")
-            }
-            guard (200...299).contains(http.statusCode) else {
-                return (nil, "http_\(http.statusCode)")
-            }
-            guard let image = UIImage(data: data) else {
-                return (nil, "decode_failed:\(data.count)b")
-            }
-            return (image, "ok:\(data.count)b")
+            guard let http = response as? HTTPURLResponse,
+                  (200...299).contains(http.statusCode),
+                  let image = UIImage(data: data) else { return nil }
+            return image
         } catch {
-            return (nil, "error:\(error.localizedDescription)")
+            return nil
         }
     }
 }
@@ -100,19 +90,9 @@ struct PersonThumbnailView: View {
                 contentUrls: nil
             )]
         )
-        guard let fallbackURL = await WikipediaSummaryService.shared.fetchThumbnailURL(for: item) else { return }
-        let (loaded, reason) = await WikiImageLoader.load(from: fallbackURL)
-        if let loaded {
-            await MainActor.run { fallbackImage = loaded }
-        }
-        #if DEBUG
-        AgentDebugLog.log(
-            location: "FeedStateViews.swift:PersonThumbnailView",
-            message: "Fallback image load",
-            data: ["detail": String(reason.prefix(80)), "title": title],
-            hypothesisId: "G"
-        )
-        #endif
+        guard let fallbackURL = await WikipediaSummaryService.shared.fetchThumbnailURL(for: item),
+              let loaded = await WikiImageLoader.load(from: fallbackURL) else { return }
+        await MainActor.run { fallbackImage = loaded }
     }
 }
 
@@ -188,11 +168,9 @@ struct PersonHeroImageView: View {
                 contentUrls: nil
             )]
         )
-        guard let fallbackURL = await WikipediaSummaryService.shared.fetchThumbnailURL(for: item) else { return }
-        let (loaded, _) = await WikiImageLoader.load(from: fallbackURL)
-        if let loaded {
-            await MainActor.run { fallbackImage = loaded }
-        }
+        guard let fallbackURL = await WikipediaSummaryService.shared.fetchThumbnailURL(for: item),
+              let loaded = await WikiImageLoader.load(from: fallbackURL) else { return }
+        await MainActor.run { fallbackImage = loaded }
     }
 }
 
