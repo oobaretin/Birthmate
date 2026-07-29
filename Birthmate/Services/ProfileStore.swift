@@ -45,7 +45,11 @@ final class ProfileStore: ObservableObject {
     }
 
     var requiresSignIn: Bool {
-        BirthmateSecrets.isCommunityConfigured
+        BirthmateSecrets.appleSignInEnabled && BirthmateSecrets.isCommunityConfigured
+    }
+
+    var isDemoCommunityMode: Bool {
+        !BirthmateSecrets.appleSignInEnabled
     }
 
     init() {
@@ -53,7 +57,12 @@ final class ProfileStore: ObservableObject {
         clientID = defaults.string(forKey: clientIDKey) ?? UUID().uuidString.lowercased()
         displayName = defaults.string(forKey: displayNameKey) ?? ""
         isDiscoverable = defaults.bool(forKey: discoverableKey)
-        discoverOthers = defaults.object(forKey: discoverOthersKey) as? Bool ?? false
+        if let saved = defaults.object(forKey: discoverOthersKey) as? Bool {
+            discoverOthers = saved
+        } else {
+            // Demo mode: show Circle preview by default so new users aren't stuck on an empty tab.
+            discoverOthers = !BirthmateSecrets.appleSignInEnabled
+        }
         famousTwinName = defaults.string(forKey: famousTwinNameKey)
         famousTwinWikiTitle = defaults.string(forKey: famousTwinWikiTitleKey)
         if let saved = defaults.array(forKey: favoritesKey) as? [String] {

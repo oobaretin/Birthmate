@@ -34,7 +34,7 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_ENTITLEMENTS: Birthmate/Birthmate.entitlements
-        DEVELOPMENT_TEAM: ""
+        DEVELOPMENT_TEAM: CUQHSM7ZW4
     dependencies:
       - target: BirthmateWidgetExtension
         embed: true
@@ -53,7 +53,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: Birthmate Widget
         CODE_SIGN_ENTITLEMENTS: BirthmateWidget/BirthmateWidget.entitlements
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: ""
+        DEVELOPMENT_TEAM: CUQHSM7ZW4
         SKIP_INSTALL: YES
     dependencies: []
 

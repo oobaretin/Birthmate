@@ -19,13 +19,33 @@ struct SupabaseAuthService: Sendable {
         let id: String
     }
 
+    private struct AuthErrorResponse: Decodable {
+        let message: String?
+        let errorDescription: String?
+        let error: String?
+        let msg: String?
+
+        enum CodingKeys: String, CodingKey {
+            case message
+            case errorDescription = "error_description"
+            case error
+            case msg
+        }
+
+        var bestMessage: String? {
+            message ?? errorDescription ?? msg ?? error
+        }
+    }
+
     private struct AppleTokenBody: Encodable {
         let provider = "apple"
         let idToken: String
+        let nonce: String
 
         enum CodingKeys: String, CodingKey {
             case provider
             case idToken = "id_token"
+            case nonce
         }
     }
 
@@ -37,10 +57,10 @@ struct SupabaseAuthService: Sendable {
         }
     }
 
-    func signInWithApple(idToken: String) async throws -> AuthSession {
+    func signInWithApple(idToken: String, nonce: String) async throws -> AuthSession {
         try await tokenRequest(
             grantType: "id_token",
-            body: AppleTokenBody(idToken: idToken)
+            body: AppleTokenBody(idToken: idToken, nonce: nonce)
         )
     }
 
@@ -67,22 +87,39 @@ struct SupabaseAuthService: Sendable {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(apiKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONEncoder().encode(AnyEncodable(body))
 
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            let message = String(data: data, encoding: .utf8) ?? "Auth failed"
+        guard let http = response as? HTTPURLResponse else {
+            throw AuthError.invalidResponse
+        }
+
+        guard (200...299).contains(http.statusCode) else {
+            let message = parseErrorMessage(from: data) ?? "Sign in failed (HTTP \(http.statusCode))."
             throw AuthError.serverError(message)
         }
 
-        let decoded = try JSONDecoder().decode(TokenResponse.self, from: data)
-        return AuthSession(
-            userID: decoded.user.id,
-            accessToken: decoded.accessToken,
-            refreshToken: decoded.refreshToken,
-            expiresAt: Date().addingTimeInterval(TimeInterval(decoded.expiresIn))
-        )
+        do {
+            let decoded = try JSONDecoder().decode(TokenResponse.self, from: data)
+            return AuthSession(
+                userID: decoded.user.id,
+                accessToken: decoded.accessToken,
+                refreshToken: decoded.refreshToken,
+                expiresAt: Date().addingTimeInterval(TimeInterval(decoded.expiresIn))
+            )
+        } catch {
+            throw AuthError.serverError("Could not read the sign-in response from the server.")
+        }
+    }
+
+    private func parseErrorMessage(from data: Data) -> String? {
+        if let decoded = try? JSONDecoder().decode(AuthErrorResponse.self, from: data),
+           let message = decoded.bestMessage {
+            return message
+        }
+        return String(data: data, encoding: .utf8)
     }
 }
 

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var birthdateStore: BirthdateStore
+    @EnvironmentObject var profileStore: ProfileStore
     @StateObject private var viewModel = HomeBirthsViewModel()
     @State private var searchText = ""
     @State private var randomPerson: OnThisDayItem?
@@ -12,7 +13,10 @@ struct HomeView: View {
     }
 
     private var displaySections: [BirthSection] {
-        viewModel.filteredSections(matching: searchText)
+        viewModel.filteredSections(
+            matching: searchText,
+            favoriteWikiTitles: profileStore.favoriteWikiTitles
+        )
     }
 
     private var visibleCount: Int {
@@ -31,6 +35,12 @@ struct HomeView: View {
                         title: "No Results",
                         systemImage: "person.crop.circle.badge.questionmark",
                         message: "No births with a recorded year were found for this date."
+                    )
+                } else if viewModel.filter == .favorites && profileStore.favoriteWikiTitles.isEmpty {
+                    FeedEmptyView(
+                        title: "No Favorites Yet",
+                        systemImage: "heart",
+                        message: "Tap Favorite on any birthmate to save them here."
                     )
                 } else if visibleCount == 0 {
                     FeedEmptyView(
@@ -124,6 +134,12 @@ struct HomeView: View {
                 }
                 .pickerStyle(.segmented)
 
+                if viewModel.filter == .favorites {
+                    Text("\(profileStore.favoriteWikiTitles.count) saved on this device")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Button {
                     randomPerson = viewModel.allItems.randomElement()
                 } label: {
@@ -215,6 +231,7 @@ struct PersonDetailView: View {
     @EnvironmentObject var authStore: AuthStore
     @EnvironmentObject var birthdateStore: BirthdateStore
     @State private var loadedExtract: String?
+    @State private var actionMessage: String?
     @StateObject private var socialActions = CommunityViewModel()
 
     private var bodyText: String {
@@ -290,6 +307,7 @@ struct PersonDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .actionFeedback($actionMessage)
         .task {
             if item.primaryPage?.extract == nil {
                 loadedExtract = await WikipediaSummaryService.shared.fetchExtract(for: item)
@@ -299,7 +317,9 @@ struct PersonDetailView: View {
 
     private func toggleFavorite() async {
         guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
+        let wasFavorite = profileStore.isFavorite(item)
         await socialActions.toggleFavorite(item, profile: profileStore, authStore: authStore)
+        actionMessage = wasFavorite ? "Removed from favorites" : "Added to favorites"
         _ = month
         _ = day
     }
@@ -307,9 +327,12 @@ struct PersonDetailView: View {
     private func setFamousTwin() async {
         guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
         await socialActions.setFamousTwin(item, month: month, day: day, profile: profileStore, authStore: authStore)
+        actionMessage = "\(item.displayName) is your famous twin"
     }
 }
 
 #Preview {
-    HomeView().environmentObject(BirthdateStore())
+    HomeView()
+        .environmentObject(BirthdateStore())
+        .environmentObject(ProfileStore())
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,13 +18,18 @@
 		442342446F711353882EB283 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7D4398F79FC5906A830825 /* NotificationManager.swift */; };
 		531FF348C43F8D6AB84692B7 /* BirthPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB768B1F65CE42F4EBE29A /* BirthPerson.swift */; };
 		5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC49677A19F1BEDEFB4902E /* MainTabView.swift */; };
+		654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */; };
+		6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */; };
 		6A1B2C3D4E5F6789012345A1 /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1B2C3D4E5F6789012345A1 /* AppTab.swift */; };
 		6B2C3D4E5F6789012345A2 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2C3D4E5F6789012345A2 /* TodayView.swift */; };
 		6C3D4E5F6789012345A3 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D4E5F6789012345A3 /* TodayViewModel.swift */; };
+		826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */; };
+		85653F834D575790906083ED /* BirthmateWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1E2F3A4B5C6D7E8F901234 /* BirthmateSecrets.swift */; };
 		8E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2F3A4B5C6D7E8F9012345 /* CommunityMember.swift */; };
 		8F3A4B5C6D7E8F90123456 /* CommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3A4B5C6D7E8F90123456 /* CommunityService.swift */; };
 		903A4B5C6D7E8F901234567 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A4B5C6D7E8F901234567 /* CommunityView.swift */; };
+		90ED68DE3173181AEB9DA725 /* WikidataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39FF4C3DE185AD1259AB3D /* WikidataModels.swift */; };
 		913A4B5C6D7E8F901234568 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A4B5C6D7E8F901234568 /* CommunityViewModel.swift */; };
 		923A4B5C6D7E8F901234569 /* MockCommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823A4B5C6D7E8F901234569 /* MockCommunityService.swift */; };
 		933A4B5C6D7E8F90123456A /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A4B5C6D7E8F90123456A /* ProfileStore.swift */; };
@@ -37,16 +42,14 @@
 		9A3A4B5C6D7E8F901234576 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3A4B5C6D7E8F901234577 /* SupabaseClient.swift */; };
 		9B3A4B5C6D7E8F901234578 /* SupabaseSocialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3A4B5C6D7E8F901234579 /* SupabaseSocialService.swift */; };
 		9C3A4B5C6D7E8F90123457A /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4B5C6D7E8F90123457B /* ActivityViewModel.swift */; };
-		9D3A4B5C6D7E8F90123457C /* ShareBirthmateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */; };
-		654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */; };
-		6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */; };
-		826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */; };
-		85653F834D575790906083ED /* BirthmateWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		90ED68DE3173181AEB9DA725 /* WikidataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39FF4C3DE185AD1259AB3D /* WikidataModels.swift */; };
 		9CCD0587B0B1D2F2FD8754CB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA6236ED332846BF22747FF /* HomeView.swift */; };
+		9D3A4B5C6D7E8F90123457C /* ShareBirthmateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */; };
+		9E3A4B5C6D7E8F90123457F /* AppleSignInNonce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3A4B5C6D7E8F901234580 /* AppleSignInNonce.swift */; };
 		9EEFA48F861A63386ABB99ED /* BirthmateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB07D5742739E3C1BED6B5B /* BirthmateApp.swift */; };
 		BAA3419A6199DE8919615146 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128B2C40BA9A1EA1E91A7E4B /* RootView.swift */; };
 		BEDBC286F7DAF42DDD1BBBCB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C559AB509CD4323930C8A094 /* Assets.xcassets */; };
+		A1B2C3D4E5F6789012345A2 /* ActionFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6789012345A3 /* ActionFeedback.swift */; };
+		A1B2C3D4E5F6789012345A4 /* WelcomeTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6789012345A5 /* WelcomeTipsView.swift */; };
 		C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */; };
 		C6E3943ABEB2377806161435 /* AppGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4119085DFABD3C095C497B1 /* AppGroupStorage.swift */; };
 		C702026F10675611C1CBFE9D /* WikipediaSummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */; };
@@ -117,13 +120,14 @@
 		873A4B5C6D7E8F90123456F /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		883A4B5C6D7E8F901234571 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		893A4B5C6D7E8F901234573 /* SignInWithAppleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButtonView.swift; sourceTree = "<group>"; };
+		8A31FD1D19D69490250C1610 /* Birthmate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Birthmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3A4B5C6D7E8F901234575 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		8AC49677A19F1BEDEFB4902E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		8B3A4B5C6D7E8F901234577 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		8C3A4B5C6D7E8F901234579 /* SupabaseSocialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseSocialService.swift; sourceTree = "<group>"; };
 		8D3A4B5C6D7E8F90123457B /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
 		8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareBirthmateCardView.swift; sourceTree = "<group>"; };
-		8A31FD1D19D69490250C1610 /* Birthmate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Birthmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AC49677A19F1BEDEFB4902E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		8F3A4B5C6D7E8F901234580 /* AppleSignInNonce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInNonce.swift; sourceTree = "<group>"; };
 		949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateTheme.swift; sourceTree = "<group>"; };
 		95CCA94D2EFB2A33089F71B4 /* OnThisDayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnThisDayModels.swift; sourceTree = "<group>"; };
 		97DFF34CE3D550DEFDDED617 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 		C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStateViews.swift; sourceTree = "<group>"; };
 		C3B15298EEF391F1F1BF593C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C559AB509CD4323930C8A094 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D4E5F6789012345A3 /* ActionFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFeedback.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6789012345A5 /* WelcomeTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeTipsView.swift; sourceTree = "<group>"; };
 		DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		DEC01496396EE666DCA1E5C9 /* Birthmate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Birthmate.entitlements; sourceTree = "<group>"; };
 		E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayBanner.swift; sourceTree = "<group>"; };
@@ -231,6 +237,8 @@
 			isa = PBXGroup;
 			children = (
 				71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */,
+				A1B2C3D4E5F6789012345A3 /* ActionFeedback.swift */,
+				8F3A4B5C6D7E8F901234580 /* AppleSignInNonce.swift */,
 				883A4B5C6D7E8F901234571 /* KeychainStore.swift */,
 			);
 			path = Utilities;
@@ -284,12 +292,15 @@
 			path = Today;
 			sourceTree = "<group>";
 		};
-		8F3A4B5C6D7E8F90123457E /* Auth */ = {
+		853359655F8B9404194AF1CB /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				893A4B5C6D7E8F901234573 /* SignInWithAppleButtonView.swift */,
+				E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */,
+				949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */,
+				C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */,
+				8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */,
 			);
-			path = Auth;
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		853A4B5C6D7E8F90123456C /* Community */ = {
@@ -300,15 +311,12 @@
 			path = Community;
 			sourceTree = "<group>";
 		};
-		853359655F8B9404194AF1CB /* Shared */ = {
+		8F3A4B5C6D7E8F90123457E /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */,
-				949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */,
-				C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */,
-				8E3A4B5C6D7E8F90123457D /* ShareBirthmateCardView.swift */,
+				893A4B5C6D7E8F901234573 /* SignInWithAppleButtonView.swift */,
 			);
-			path = Shared;
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		B6C1278404182828DD6DD765 /* OnThisDay */ = {
@@ -352,6 +360,7 @@
 			isa = PBXGroup;
 			children = (
 				DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */,
+				A1B2C3D4E5F6789012345A5 /* WelcomeTipsView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -430,7 +439,6 @@
 						ProvisioningStyle = Automatic;
 					};
 					B9B4D7E6DEE07F9705C24511 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -510,6 +518,8 @@
 				34AC489E14CF12857AD23402 /* FeedStateViews.swift in Sources */,
 				6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */,
 				9C3A4B5C6D7E8F90123457A /* ActivityViewModel.swift in Sources */,
+				9E3A4B5C6D7E8F90123457F /* AppleSignInNonce.swift in Sources */,
+				A1B2C3D4E5F6789012345A2 /* ActionFeedback.swift in Sources */,
 				973A4B5C6D7E8F901234570 /* KeychainStore.swift in Sources */,
 				9CCD0587B0B1D2F2FD8754CB /* HomeView.swift in Sources */,
 				5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */,
@@ -518,6 +528,7 @@
 				04075CB1702D35C993AD2276 /* OnThisDayView.swift in Sources */,
 				EA93D5C98B9F4C814E801D04 /* OnThisDayViewModel.swift in Sources */,
 				C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */,
+				A1B2C3D4E5F6789012345A4 /* WelcomeTipsView.swift in Sources */,
 				BAA3419A6199DE8919615146 /* RootView.swift in Sources */,
 				F91471A1799739AF59BBF5F6 /* SettingsView.swift in Sources */,
 				983A4B5C6D7E8F901234572 /* SignInWithAppleButtonView.swift in Sources */,
@@ -602,6 +613,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -619,6 +631,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -679,6 +693,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -696,7 +711,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BirthmateWidget/BirthmateWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BirthmateWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Birthmate Widget";
@@ -720,7 +735,7 @@
 				CODE_SIGN_ENTITLEMENTS = Birthmate/Birthmate.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Birthmate/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Birthmate;
@@ -740,7 +755,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BirthmateWidget/BirthmateWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BirthmateWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Birthmate Widget";
@@ -760,6 +775,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -781,7 +798,7 @@
 				CODE_SIGN_ENTITLEMENTS = Birthmate/Birthmate.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CUQHSM7ZW4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Birthmate/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Birthmate;

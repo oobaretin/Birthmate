@@ -7,6 +7,9 @@ final class AuthStore: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var pendingInviteUserID: String?
+    @Published private(set) var statusMessage: String?
+
+    var pendingAppleNonce: String = ""
 
     private let authService = SupabaseAuthService()
     private let sessionKey = "auth_session"
@@ -33,13 +36,24 @@ final class AuthStore: ObservableObject {
         return refreshed
     }
 
-    func handleAppleCredential(_ credential: ASAuthorizationAppleIDCredential) async {
+    func handleAppleCredential(_ credential: ASAuthorizationAppleIDCredential, nonce: String) async {
         errorMessage = nil
+        statusMessage = "Connecting to Birthmate…"
         isLoading = true
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            if !isSignedIn {
+                statusMessage = nil
+            }
+        }
 
         guard BirthmateSecrets.isCommunityConfigured else {
             errorMessage = AuthError.notConfigured.localizedDescription
+            return
+        }
+
+        guard !nonce.isEmpty else {
+            errorMessage = "Sign in could not be verified. Please try again."
             return
         }
 
@@ -50,11 +64,36 @@ final class AuthStore: ObservableObject {
         }
 
         do {
-            let newSession = try await authService.signInWithApple(idToken: idToken)
+            let newSession = try await authService.signInWithApple(idToken: idToken, nonce: nonce)
             persist(newSession)
+            statusMessage = "Signed in successfully."
+            errorMessage = nil
+
+            if let given = credential.fullName?.givenName, !given.isEmpty {
+                NotificationCenter.default.post(
+                    name: .appleSignInProvidedName,
+                    object: nil,
+                    userInfo: ["givenName": given]
+                )
+            }
         } catch {
-            errorMessage = error.localizedDescription
+            if case AuthError.serverError(let message) = error {
+                errorMessage = friendlyServerMessage(message)
+            } else {
+                errorMessage = error.localizedDescription
+            }
         }
+    }
+
+    private func friendlyServerMessage(_ message: String) -> String {
+        let lower = message.lowercased()
+        if lower.contains("audience") || lower.contains("client id") || lower.contains("client_id") {
+            return "Apple is not linked to Supabase yet. In Supabase → Authentication → Apple, set Client IDs to com.birthmate.app"
+        }
+        if lower.contains("nonce") {
+            return "Sign in verification failed. Please try again."
+        }
+        return "Could not finish sign in: \(message)"
     }
 
     func handleInviteURL(_ url: URL) {
@@ -69,6 +108,8 @@ final class AuthStore: ObservableObject {
 
     func signOut() {
         session = nil
+        statusMessage = nil
+        errorMessage = nil
         KeychainStore.delete(account: sessionKey)
     }
 
@@ -86,4 +127,8 @@ final class AuthStore: ObservableObject {
             try? KeychainStore.save(data, account: sessionKey)
         }
     }
+}
+
+extension Notification.Name {
+    static let appleSignInProvidedName = Notification.Name("appleSignInProvidedName")
 }

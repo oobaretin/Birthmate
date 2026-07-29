@@ -29,7 +29,7 @@ protocol SocialService: Sendable {
 
 enum CommunityServiceProvider {
     static let shared: CommunityService = {
-        if BirthmateSecrets.isCommunityConfigured {
+        if BirthmateSecrets.appleSignInEnabled, BirthmateSecrets.isCommunityConfigured {
             return SupabaseCommunityService()
         }
         return MockCommunityService()
@@ -38,7 +38,7 @@ enum CommunityServiceProvider {
 
 enum SocialServiceProvider {
     static let shared: SocialService = {
-        if BirthmateSecrets.isCommunityConfigured {
+        if BirthmateSecrets.appleSignInEnabled, BirthmateSecrets.isCommunityConfigured {
             return SupabaseSocialService()
         }
         return MockSocialService()

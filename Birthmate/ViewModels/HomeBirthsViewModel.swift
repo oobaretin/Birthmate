@@ -67,8 +67,8 @@ final class HomeBirthsViewModel: ObservableObject {
         }
     }
 
-    func filteredItems(matching searchText: String) -> [OnThisDayItem] {
-        let base = itemsForFilter(filter)
+    func filteredItems(matching searchText: String, favoriteWikiTitles: Set<String> = []) -> [OnThisDayItem] {
+        let base = itemsForFilter(filter, favoriteWikiTitles: favoriteWikiTitles)
         guard !searchText.isEmpty else { return base }
         let query = searchText.lowercased()
         return base.filter { item in
@@ -78,8 +78,8 @@ final class HomeBirthsViewModel: ObservableObject {
         }
     }
 
-    func filteredSections(matching searchText: String) -> [BirthSection] {
-        FeedSectionBuilder.build(from: filteredItems(matching: searchText)) { $0.birthYear }
+    func filteredSections(matching searchText: String, favoriteWikiTitles: Set<String> = []) -> [BirthSection] {
+        FeedSectionBuilder.build(from: filteredItems(matching: searchText, favoriteWikiTitles: favoriteWikiTitles)) { $0.birthYear }
     }
 
     private func apply(_ fetched: [OnThisDayItem]) {
@@ -99,16 +99,21 @@ final class HomeBirthsViewModel: ObservableObject {
         }
     }
 
-    private func itemsForFilter(_ filter: BirthFilter) -> [OnThisDayItem] {
+    private func itemsForFilter(_ filter: BirthFilter, favoriteWikiTitles: Set<String>) -> [OnThisDayItem] {
         switch filter {
         case .all: return allItems
         case .living: return allItems.filter(\.isLiving)
         case .historical: return allItems.filter { !$0.isLiving }
+        case .favorites:
+            return allItems.filter { item in
+                guard let title = item.primaryPage?.title else { return false }
+                return favoriteWikiTitles.contains(title)
+            }
         }
     }
 
     private func rebuildSections() {
-        let items = itemsForFilter(filter)
+        let items = itemsForFilter(filter, favoriteWikiTitles: [])
         sections = FeedSectionBuilder.build(from: items) { $0.birthYear }.map { section in
             let livingInEra = section.items.filter(\.isLiving).count
             let subtitle = livingInEra > 0

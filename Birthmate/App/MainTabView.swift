@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab: AppTab = .today
+    @State private var showWelcomeTips = WelcomeTipsStore.shouldShow
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -14,7 +15,7 @@ struct MainTabView: View {
                 .tag(AppTab.community)
 
             HomeView()
-                .tabItem { Label("People", systemImage: "person.2.fill") }
+                .tabItem { Label("Birthmates", systemImage: "person.2.fill") }
                 .tag(AppTab.people)
 
             OnThisDayView()
@@ -26,5 +27,9 @@ struct MainTabView: View {
                 .tag(AppTab.settings)
         }
         .tint(BirthmateTheme.accent)
+        .sheet(isPresented: $showWelcomeTips) {
+            WelcomeTipsView()
+                .onDisappear { WelcomeTipsStore.markSeen() }
+        }
     }
 }

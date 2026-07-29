@@ -11,23 +11,29 @@ struct SignInWithAppleButtonView: View {
 
     var body: some View {
         SignInWithAppleButton(.signIn) { request in
+            let nonce = AppleSignInNonce.random()
+            authStore.pendingAppleNonce = nonce
             request.requestedScopes = [.fullName, .email]
+            request.nonce = AppleSignInNonce.sha256(nonce)
         } onCompletion: { result in
+            let nonce = authStore.pendingAppleNonce
             switch result {
             case .success(let authorization):
                 guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+                    authStore.errorMessage = "Unexpected Apple sign-in response."
                     return
                 }
                 Task {
-                    await authStore.handleAppleCredential(credential)
+                    await authStore.handleAppleCredential(credential, nonce: nonce)
                 }
             case .failure(let error):
-                authStore.errorMessage = error.localizedDescription
+                authStore.errorMessage = AppleSignInErrorHelper.message(for: error)
             }
         }
         .signInWithAppleButtonStyle(style)
         .frame(height: 48)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .disabled(authStore.isLoading)
     }
 }
 

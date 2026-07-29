@@ -46,7 +46,13 @@ struct MockSocialService: SocialService {
     func respondToFriendRequest(id: String, accept: Bool, auth: AuthContext) async throws {}
     func fetchActivity(auth: AuthContext) async throws -> [ActivityEvent] {
         [
-            ActivityEvent(id: "1", eventType: "welcome", title: "Welcome to Birthday Circle", detail: "Invite friends from the Circle tab.", createdAt: Date())
+            ActivityEvent(
+                id: "1",
+                eventType: "welcome",
+                title: "Preview: Birthday Circle",
+                detail: "Sample activity shown until live sign-in is available.",
+                createdAt: Date()
+            )
         ]
     }
     func logActivity(type: String, title: String, detail: String?, auth: AuthContext) async throws {}

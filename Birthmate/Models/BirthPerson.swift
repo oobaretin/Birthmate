@@ -198,6 +198,7 @@ enum BirthFilter: String, CaseIterable, Identifiable {
     case all = "All"
     case living = "Living"
     case historical = "Historical"
+    case favorites = "Favorites"
     var id: String { rawValue }
 }
 

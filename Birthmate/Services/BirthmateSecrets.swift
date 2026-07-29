@@ -1,6 +1,10 @@
 import Foundation
 
 enum BirthmateSecrets {
+    /// Sign in with Apple requires a paid Apple Developer Program membership.
+    /// Free Personal Teams cannot create provisioning profiles with that capability.
+    static let appleSignInEnabled = false
+
     static var supabaseURL: URL? {
         string(for: "SUPABASE_URL").flatMap(URL.init(string:))
     }

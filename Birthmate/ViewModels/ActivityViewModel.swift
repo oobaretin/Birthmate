@@ -12,7 +12,14 @@ final class ActivityViewModel: ObservableObject {
         self.socialService = socialService
     }
 
-    func load(authStore: AuthStore) async {
+    var isDemoMode: Bool { socialService.usesDemoData }
+
+    func load(authStore: AuthStore, discoverOthers: Bool) async {
+        guard discoverOthers else {
+            events = []
+            return
+        }
+
         guard authStore.isSignedIn || socialService.usesDemoData else {
             events = []
             return

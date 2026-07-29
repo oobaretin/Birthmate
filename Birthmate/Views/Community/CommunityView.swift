@@ -81,10 +81,25 @@ struct CommunityView: View {
             )
             SignInWithAppleButtonView()
                 .padding(.horizontal, 24)
+            if authStore.isLoading {
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("Connecting…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            if let status = authStore.statusMessage {
+                Text(status)
+                    .font(.caption)
+                    .foregroundStyle(BirthmateTheme.accent)
+                    .padding(.horizontal)
+            }
             if let error = authStore.errorMessage {
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.red)
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal)
             }
         }
@@ -92,11 +107,25 @@ struct CommunityView: View {
     }
 
     private var disabledState: some View {
-        FeedEmptyView(
-            title: "Birthday Circle is Off",
-            systemImage: "person.3.fill",
-            message: "Turn on “Discover others on my day” in Settings to see real people who share your birthday."
-        )
+        VStack(spacing: 20) {
+            FeedEmptyView(
+                title: "Birthday Circle is Off",
+                systemImage: "person.3.fill",
+                message: "Turn on Birthday Circle to preview sample people who share your day."
+            )
+
+            Button {
+                profileStore.discoverOthers = true
+            } label: {
+                Text("Turn On Birthday Circle")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(BirthmateTheme.accent)
+            .padding(.horizontal, 24)
+        }
         .padding()
     }
 
@@ -105,11 +134,11 @@ struct CommunityView: View {
             if viewModel.isDemoMode {
                 Section {
                     Label {
-                        Text("Demo mode — sample people shown until Supabase is configured.")
+                        Text("Preview mode — sample people shown until live sign-in is available.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } icon: {
-                        Image(systemName: "info.circle.fill")
+                        Image(systemName: "eye.fill")
                             .foregroundStyle(BirthmateTheme.accent)
                     }
                 }
@@ -154,12 +183,17 @@ struct CommunityView: View {
 
             Section("On your day") {
                 if viewModel.members.isEmpty {
-                    Text("No one else here yet. Share your invite link to grow your circle.")
+                    Text("No sample people to show right now. Pull to refresh.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(viewModel.members) { member in
-                        CommunityMemberRow(member: member, dateLabel: formattedDate) {
+                        CommunityMemberRow(
+                            member: member,
+                            dateLabel: formattedDate,
+                            isDemoMode: viewModel.isDemoMode,
+                            requestSent: viewModel.demoSentRequestIDs.contains(member.id)
+                        ) {
                             Task { await viewModel.sendFriendRequest(to: member, authStore: authStore, profile: profileStore) }
                         }
                     }
@@ -232,6 +266,8 @@ struct CommunityView: View {
 struct CommunityMemberRow: View {
     let member: CommunityMember
     let dateLabel: String
+    var isDemoMode: Bool = false
+    var requestSent: Bool = false
     var onAddFriend: (() -> Void)?
 
     var body: some View {
@@ -246,8 +282,19 @@ struct CommunityMemberRow: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(member.displayName)
-                    .font(.body.weight(.semibold))
+                HStack(spacing: 6) {
+                    Text(member.displayName)
+                        .font(.body.weight(.semibold))
+                    if isDemoMode {
+                        Text("Sample")
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color(.systemGray5))
+                            .foregroundStyle(.secondary)
+                            .clipShape(Capsule())
+                    }
+                }
                 Text("Shares \(dateLabel)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -260,8 +307,12 @@ struct CommunityMemberRow: View {
 
             Spacer()
 
-            if let onAddFriend, !member.id.hasPrefix("demo-") {
-                Button("Add", action: onAddFriend)
+            if requestSent {
+                Text("Sent")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            } else if let onAddFriend {
+                Button(isDemoMode ? "Connect" : "Add", action: onAddFriend)
                     .buttonStyle(.bordered)
                     .tint(BirthmateTheme.accent)
             }

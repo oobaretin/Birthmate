@@ -38,10 +38,24 @@ struct SettingsView: View {
                             }
                         } else {
                             SignInWithAppleButtonView()
+                            if authStore.isLoading {
+                                HStack(spacing: 8) {
+                                    ProgressView()
+                                    Text("Connecting…")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            if let status = authStore.statusMessage {
+                                Text(status)
+                                    .font(.caption)
+                                    .foregroundStyle(BirthmateTheme.accent)
+                            }
                             if let error = authStore.errorMessage {
                                 Text(error)
                                     .font(.caption)
                                     .foregroundStyle(.red)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
                         }
                     } header: {
@@ -82,10 +96,10 @@ struct SettingsView: View {
                 } header: {
                     Text("Birthday Circle")
                 } footer: {
-                    if BirthmateSecrets.isCommunityConfigured {
+                    if BirthmateSecrets.appleSignInEnabled, BirthmateSecrets.isCommunityConfigured {
                         Text("Live community is enabled.")
                     } else {
-                        Text("Demo mode shows sample people until Supabase is configured.")
+                        Text("Preview mode uses sample people. Live community will need Apple Developer Program membership later.")
                     }
                 }
 
@@ -131,6 +145,12 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .onReceive(NotificationCenter.default.publisher(for: .appleSignInProvidedName)) { notification in
+                if profileStore.displayName.isEmpty,
+                   let given = notification.userInfo?["givenName"] as? String {
+                    profileStore.displayName = given
+                }
+            }
             .onChange(of: profileStore.displayName) { _, _ in syncProfile() }
             .onChange(of: profileStore.isDiscoverable) { _, _ in syncProfile() }
             .onChange(of: profileStore.discoverOthers) { _, _ in syncProfile() }

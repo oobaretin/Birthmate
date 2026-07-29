@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TodayView: View {
     @EnvironmentObject var birthdateStore: BirthdateStore
+    @EnvironmentObject var profileStore: ProfileStore
     @EnvironmentObject var authStore: AuthStore
     @Binding var selectedTab: AppTab
     @StateObject private var viewModel = TodayViewModel()
@@ -28,7 +29,7 @@ struct TodayView: View {
                     loadingView
                 } else if let error = viewModel.errorMessage,
                           viewModel.featuredPerson == nil && viewModel.featuredEvent == nil {
-                    FeedErrorView(message: error, retry: reload)
+                    FeedErrorView(message: error) { await reload(forceRefresh: true) }
                 } else {
                     scrollContent
                 }
@@ -53,8 +54,13 @@ struct TodayView: View {
                 EventDetailView(item: route.item, dateLabel: formattedDate)
             }
         }
-        .task { await reload() }
-        .task { await activityViewModel.load(authStore: authStore) }
+        .task(id: todayRefreshKey) { await reload(forceRefresh: false) }
+        .task(id: profileStore.discoverOthers) {
+            await activityViewModel.load(
+                authStore: authStore,
+                discoverOthers: profileStore.discoverOthers
+            )
+        }
     }
 
     private var scrollContent: some View {
@@ -80,7 +86,31 @@ struct TodayView: View {
             }
             .padding()
         }
-        .refreshable { await reload() }
+        .refreshable { await reload(forceRefresh: true) }
+    }
+
+    private var todayRefreshKey: String {
+        guard let month = birthdateStore.month, let day = birthdateStore.day else { return "" }
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return "\(formatter.string(from: Date()))-\(month)-\(day)"
+    }
+
+    private var isBirthdayToday: Bool {
+        guard let month = birthdateStore.month, let day = birthdateStore.day else { return false }
+        let calendar = Calendar.current
+        let now = Date()
+        return calendar.component(.month, from: now) == month
+            && calendar.component(.day, from: now) == day
+    }
+
+    private var headerSubtitle: String {
+        if isBirthdayToday {
+            return "Happy birthday! Random highlights for \(formattedDate) — your day."
+        }
+        return "On \(formattedDate). Random highlights from your day — pull down to shuffle."
     }
 
     private var headerSection: some View {
@@ -88,7 +118,7 @@ struct TodayView: View {
             Text(greeting)
                 .font(.title2.bold())
 
-            Text("Your day is \(formattedDate). Here are today's highlights.")
+            Text(headerSubtitle)
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -102,9 +132,13 @@ struct TodayView: View {
     @ViewBuilder
     private func featuredPersonSection(_ person: OnThisDayItem) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Featured Birthmate", systemImage: "person.crop.circle.fill")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(BirthmateTheme.accent)
+            featuredSectionHeader(
+                title: "Featured Birthmate",
+                systemImage: "person.crop.circle.fill",
+                actionTitle: "Shuffle"
+            ) {
+                viewModel.showAnotherFeaturedPerson()
+            }
 
             NavigationLink(value: TodayPersonRoute(item: person)) {
                 FeaturedPersonCard(item: person)
@@ -117,9 +151,13 @@ struct TodayView: View {
     @ViewBuilder
     private func featuredEventSection(_ event: OnThisDayItem) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("This Day in History", systemImage: "clock.fill")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(BirthmateTheme.accent)
+            featuredSectionHeader(
+                title: "On This Day in History",
+                systemImage: "clock.fill",
+                actionTitle: "Shuffle"
+            ) {
+                viewModel.showAnotherFeaturedEvent()
+            }
 
             NavigationLink(value: TodayEventRoute(item: event)) {
                 FeaturedEventCard(item: event)
@@ -129,13 +167,35 @@ struct TodayView: View {
         }
     }
 
+    private func featuredSectionHeader(
+        title: String,
+        systemImage: String,
+        actionTitle: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        HStack(alignment: .center) {
+            Label(title, systemImage: systemImage)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(BirthmateTheme.accent)
+
+            Spacer()
+
+            Button(actionTitle, action: action)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(BirthmateTheme.accent)
+        }
+    }
+
     private var activitySection: some View {
         Group {
-            if !activityViewModel.events.isEmpty {
+            if profileStore.discoverOthers, !activityViewModel.events.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
-                    Label("Your activity", systemImage: "bell.fill")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(BirthmateTheme.accent)
+                    Label(
+                        activityViewModel.isDemoMode ? "Preview activity" : "Your activity",
+                        systemImage: "bell.fill"
+                    )
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(BirthmateTheme.accent)
 
                     ForEach(activityViewModel.events.prefix(3)) { event in
                         VStack(alignment: .leading, spacing: 4) {
@@ -173,8 +233,10 @@ struct TodayView: View {
                 selectedTab = .community
             } label: {
                 ExploreRow(
-                    title: "See real birthday twins",
-                    subtitle: "Meet others in Birthday Circle",
+                    title: profileStore.isDemoCommunityMode ? "Preview Birthday Circle" : "See birthday twins",
+                    subtitle: profileStore.isDemoCommunityMode
+                        ? "Sample people who share your day"
+                        : "Meet others in Birthday Circle",
                     systemImage: "person.3.fill"
                 )
             }
@@ -219,9 +281,9 @@ struct TodayView: View {
         .redacted(reason: .placeholder)
     }
 
-    private func reload() async {
+    private func reload(forceRefresh: Bool = false) async {
         guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
-        await viewModel.load(month: month, day: day)
+        await viewModel.load(month: month, day: day, forceRefresh: forceRefresh)
     }
 }
 
@@ -347,6 +409,8 @@ struct ExploreRow: View {
 #Preview {
     TodayView(selectedTab: .constant(.today))
         .environmentObject(BirthdateStore())
+        .environmentObject(ProfileStore())
+        .environmentObject(AuthStore())
 }
 
 struct TodayPersonRoute: Hashable {

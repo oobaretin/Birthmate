@@ -10,6 +10,7 @@ final class CommunityViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isDemoMode = false
     @Published var lastSyncedAt: Date?
+    @Published var demoSentRequestIDs: Set<String> = []
 
     private let communityService: CommunityService
     private let socialService: SocialService
@@ -94,6 +95,11 @@ final class CommunityViewModel: ObservableObject {
     }
 
     func sendFriendRequest(to member: CommunityMember, authStore: AuthStore, profile: ProfileStore) async {
+        if communityService.usesDemoData {
+            demoSentRequestIDs.insert(member.id)
+            return
+        }
+
         do {
             let auth = try await resolvedAuth(authStore: authStore, profile: profile)
             try await socialService.sendFriendRequest(to: member.id, auth: auth)
