@@ -69,9 +69,9 @@ struct HomeView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack(spacing: 2) {
-                        Text("Born On Your Day")
+                        Text("Birthmates")
                             .font(.headline)
-                        Text("\(visibleCount) of \(viewModel.totalCount) people")
+                        Text("\(visibleCount) of \(viewModel.totalCount) on your day")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         if viewModel.isLoadingMore {

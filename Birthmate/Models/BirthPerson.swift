@@ -2,27 +2,115 @@ import Foundation
 
 enum WikiFormatting {
     static func plainText(from html: String) -> String {
-        html
-            .replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
-            .replacingOccurrences(of: "&nbsp;", with: " ")
-            .replacingOccurrences(of: "&#39;", with: "'")
-            .replacingOccurrences(of: "&amp;", with: "&")
+        let withoutTags = html.replacingOccurrences(
+            of: "<[^>]+>",
+            with: "",
+            options: .regularExpression
+        )
+        return decodeHTMLEntities(withoutTags)
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     static func personName(from item: OnThisDayItem) -> String {
+        let raw: String
         if let displayTitle = item.primaryPage?.displayTitle {
             let plain = plainText(from: displayTitle)
-            if !plain.isEmpty { return plain }
+            if !plain.isEmpty {
+                raw = plain
+            } else if let title = item.primaryPage?.title {
+                raw = decodeWikiTitle(title)
+            } else {
+                raw = item.text.components(separatedBy: ",").first?.trimmingCharacters(in: .whitespaces) ?? item.text
+            }
+        } else if let title = item.primaryPage?.title {
+            raw = decodeWikiTitle(title)
+        } else {
+            raw = item.text.components(separatedBy: ",").first?.trimmingCharacters(in: .whitespaces) ?? item.text
         }
-        if let title = item.primaryPage?.title {
-            return title.replacingOccurrences(of: "_", with: " ")
+
+        return cleanPersonName(raw)
+    }
+
+    private static func decodeWikiTitle(_ title: String) -> String {
+        decodeHTMLEntities(title.removingPercentEncoding ?? title)
+            .replacingOccurrences(of: "_", with: " ")
+    }
+
+    private static func cleanPersonName(_ name: String) -> String {
+        var cleaned = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        cleaned = cleaned.replacingOccurrences(
+            of: #"\s*\((?:[^)]*\bborn\s+\d{4}[^)]*)\)"#,
+            with: "",
+            options: .regularExpression
+        )
+        cleaned = cleaned.replacingOccurrences(
+            of: #"\s*\((?:died|d\.|b\.)\s+\d{4}[^)]*\)"#,
+            with: "",
+            options: [.regularExpression, .caseInsensitive]
+        )
+
+        return cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private static func decodeHTMLEntities(_ text: String) -> String {
+        var result = text
+
+        if let decimalRegex = try? NSRegularExpression(pattern: "&#(\\d+);") {
+            result = replaceEntityMatches(in: result, regex: decimalRegex) { code in
+                Unicode.Scalar(code).map { String(Character($0)) }
+            }
         }
-        return item.text.components(separatedBy: ",").first?.trimmingCharacters(in: .whitespaces) ?? item.text
+
+        if let hexRegex = try? NSRegularExpression(pattern: "&#x([0-9A-Fa-f]+);") {
+            result = replaceEntityMatches(in: result, regex: hexRegex) { code in
+                Unicode.Scalar(code).map { String(Character($0)) }
+            }
+        }
+
+        return result
+            .replacingOccurrences(of: "&nbsp;", with: " ")
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&quot;", with: "\"")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&#39;", with: "'")
+            .replacingOccurrences(of: "&#039;", with: "'")
+            .replacingOccurrences(of: "&apos;", with: "'")
+    }
+
+    private static func replaceEntityMatches(
+        in text: String,
+        regex: NSRegularExpression,
+        transform: (UInt32) -> String?
+    ) -> String {
+        var result = text
+        let nsRange = NSRange(result.startIndex..<result.endIndex, in: result)
+
+        for match in regex.matches(in: result, options: [], range: nsRange).reversed() {
+            guard match.numberOfRanges >= 2,
+                  let codeRange = Range(match.range(at: 1), in: result),
+                  let fullRange = Range(match.range, in: result),
+                  let code = UInt32(result[codeRange]),
+                  let replacement = transform(code) else { continue }
+            result.replaceSubrange(fullRange, with: replacement)
+        }
+
+        return result
     }
 
     static func eventText(from item: OnThisDayItem) -> String {
         plainText(from: item.text)
+    }
+
+    static func isValidPersonLabel(_ name: String) -> Bool {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return false }
+        if trimmed == "Unknown value" { return false }
+        if trimmed.range(of: #"^Q\d+$"#, options: .regularExpression) != nil { return false }
+        if trimmed.lowercased().contains("wikidata.org") { return false }
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") { return false }
+        return true
     }
 
     static func isLiving(_ item: OnThisDayItem) -> Bool {

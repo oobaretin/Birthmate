@@ -59,8 +59,7 @@ enum WikidataError: Error, LocalizedError {
 extension OnThisDayItem {
     static func fromWikidata(binding: WikidataBinding) -> OnThisDayItem? {
         guard let name = binding.personLabel?.value,
-              !name.hasPrefix("Q"),
-              name != "Unknown value" else { return nil }
+              WikiFormatting.isValidPersonLabel(name) else { return nil }
 
         let birthISO = binding.birth?.value ?? ""
         let year = Self.parseYear(from: birthISO)

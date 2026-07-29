@@ -38,7 +38,7 @@ struct OnboardingView: View {
                     Text("Birthmate")
                         .font(.largeTitle.bold())
 
-                    Text("Enter your birth month and day to see who shares it with you.")
+                    Text("Pick your birthday to discover who shares it and what happened in history on your day.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)

@@ -18,23 +18,32 @@ struct BirthdayBanner: View {
     }
 
     var body: some View {
-        if !isBirthdayToday {
-            HStack(spacing: 10) {
-                Image(systemName: "calendar")
-                    .foregroundStyle(BirthmateTheme.accent)
-                VStack(alignment: .leading, spacing: 2) {
+        HStack(spacing: 10) {
+            Image(systemName: isBirthdayToday ? "party.popper.fill" : "calendar")
+                .foregroundStyle(BirthmateTheme.accent)
+
+            VStack(alignment: .leading, spacing: 2) {
+                if isBirthdayToday {
+                    Text("Happy Birthday!")
+                        .font(.subheadline.weight(.semibold))
+                    Text("You're celebrating with everyone born on \(birthdayLabel).")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
                     Text("Today is \(todayLabel)")
                         .font(.subheadline.weight(.medium))
                     Text("Your day is \(birthdayLabel)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                Spacer()
             }
-            .padding(12)
-            .background(BirthmateTheme.accent.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+            Spacer()
         }
+        .padding(12)
+        .background(BirthmateTheme.accent.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .accessibilityElement(children: .combine)
     }
 }
 

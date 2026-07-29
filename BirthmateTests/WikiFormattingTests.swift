@@ -12,6 +12,27 @@ final class WikiFormattingTests: XCTestCase {
         XCTAssertEqual(WikiFormatting.plainText(from: html), "Tom & Jerry's")
     }
 
+    func testPlainTextDecodesZeroPaddedApostropheEntity() {
+        let html = "Dylan O&#039;Brien"
+        XCTAssertEqual(WikiFormatting.plainText(from: html), "Dylan O'Brien")
+    }
+
+    func testPersonNameStripsBornDisambiguation() {
+        let item = OnThisDayItem(
+            text: "Zhou Ji, politician",
+            year: 1946,
+            pages: [WikiPage(
+                title: "Zhou_Ji_(politician,_born_1946)",
+                displayTitle: "Zhou Ji (politician, born 1946)",
+                extract: nil,
+                thumbnail: nil,
+                originalImage: nil,
+                contentUrls: nil
+            )]
+        )
+        XCTAssertEqual(item.displayName, "Zhou Ji")
+    }
+
     func testEventYearFromField() {
         let item = OnThisDayItem(text: "Something happened", year: 1969, pages: nil)
         XCTAssertEqual(WikiFormatting.eventYear(for: item), 1969)

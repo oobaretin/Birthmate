@@ -18,6 +18,9 @@
 		442342446F711353882EB283 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7D4398F79FC5906A830825 /* NotificationManager.swift */; };
 		531FF348C43F8D6AB84692B7 /* BirthPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DB768B1F65CE42F4EBE29A /* BirthPerson.swift */; };
 		5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC49677A19F1BEDEFB4902E /* MainTabView.swift */; };
+		6A1B2C3D4E5F6789012345A1 /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1B2C3D4E5F6789012345A1 /* AppTab.swift */; };
+		6B2C3D4E5F6789012345A2 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B2C3D4E5F6789012345A2 /* TodayView.swift */; };
+		6C3D4E5F6789012345A3 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D4E5F6789012345A3 /* TodayViewModel.swift */; };
 		654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */; };
 		6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */; };
 		826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */; };
@@ -82,6 +85,9 @@
 		60F767B3E7EB7E33E2A38BFD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		717668A48EE6A60FBE0F317E /* BirthmateWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BirthmateWidget.entitlements; sourceTree = "<group>"; };
 		71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatting.swift; sourceTree = "<group>"; };
+		7A1B2C3D4E5F6789012345A1 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
+		7B2C3D4E5F6789012345A2 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		7C3D4E5F6789012345A3 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		8A31FD1D19D69490250C1610 /* Birthmate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Birthmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AC49677A19F1BEDEFB4902E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthmateTheme.swift; sourceTree = "<group>"; };
@@ -110,6 +116,7 @@
 			children = (
 				1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */,
 				1AF78FDC11F5A610DE35A8F1 /* OnThisDayViewModel.swift */,
+				7C3D4E5F6789012345A3 /* TodayViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -135,6 +142,7 @@
 				578604DBD01A6E4CBAA3435B /* Home */,
 				FDCF407814D5813E46B0EA0C /* Onboarding */,
 				B6C1278404182828DD6DD765 /* OnThisDay */,
+				7D4E5F6789012345A4 /* Today */,
 				D58F22167D4F25D37E942730 /* Settings */,
 				853359655F8B9404194AF1CB /* Shared */,
 			);
@@ -192,6 +200,7 @@
 		6935D4F1C4136D3197756A6E /* App */ = {
 			isa = PBXGroup;
 			children = (
+				7A1B2C3D4E5F6789012345A1 /* AppTab.swift */,
 				1DB07D5742739E3C1BED6B5B /* BirthmateApp.swift */,
 				8AC49677A19F1BEDEFB4902E /* MainTabView.swift */,
 				128B2C40BA9A1EA1E91A7E4B /* RootView.swift */,
@@ -217,6 +226,14 @@
 				AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		7D4E5F6789012345A4 /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				7B2C3D4E5F6789012345A2 /* TodayView.swift */,
+			);
+			path = Today;
 			sourceTree = "<group>";
 		};
 		853359655F8B9404194AF1CB /* Shared */ = {
@@ -405,6 +422,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B960FA58C5A33CACD3B620 /* APIService.swift in Sources */,
+				6A1B2C3D4E5F6789012345A1 /* AppTab.swift in Sources */,
 				1FF950375E10ADDE6DB29D32 /* AppGroupStorage.swift in Sources */,
 				531FF348C43F8D6AB84692B7 /* BirthPerson.swift in Sources */,
 				F687876B0B39075DE19B5436 /* BirthdateStore.swift in Sources */,
@@ -423,6 +441,8 @@
 				C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */,
 				BAA3419A6199DE8919615146 /* RootView.swift in Sources */,
 				F91471A1799739AF59BBF5F6 /* SettingsView.swift in Sources */,
+				6B2C3D4E5F6789012345A2 /* TodayView.swift in Sources */,
+				6C3D4E5F6789012345A3 /* TodayViewModel.swift in Sources */,
 				90ED68DE3173181AEB9DA725 /* WikidataModels.swift in Sources */,
 				18F8693BD042EC653DC3D920 /* WikidataService.swift in Sources */,
 				C702026F10675611C1CBFE9D /* WikipediaSummaryService.swift in Sources */,
