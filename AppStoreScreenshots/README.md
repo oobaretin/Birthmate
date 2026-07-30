@@ -2,22 +2,32 @@
 
 Capture on **iPhone 16 Pro Max** Simulator (or required App Store device sizes).
 
-## Automated
+## Full automated set
 
 ```bash
-./scripts/verify-fresh-install.sh          # fresh install → onboarding
-./scripts/capture-app-store-screenshots.sh # saves current screen
+chmod +x scripts/capture-all-screenshots.sh
+./scripts/capture-all-screenshots.sh
 ```
 
-## Manual set (navigate in Simulator, run capture script after each)
+Produces:
 
 | File | Screen |
 |------|--------|
-| `01-current-screen.png` | Onboarding (auto after fresh install) |
-| `02-today.png` | Today tab |
-| `03-birthmates.png` | Birthmates tab |
-| `04-history.png` | History tab |
-| `05-settings.png` | Settings (optional) |
-| `06-welcome.png` | Welcome sheet (delete app or reset `birthmate_has_seen_welcome_tips`) |
+| `02-onboarding.png` | Month/day picker |
+| `03-today.png` | Today tab |
+| `04-birthmates.png` | Birthmates tab |
+| `05-history.png` | History tab |
+| `06-settings.png` | Settings |
+| `07-circle.png` | Birthday Circle (preview) |
+| `08-welcome.png` | Welcome quick tour sheet |
+
+Optional env vars: `SCREENSHOT_MONTH`, `SCREENSHOT_DAY`, `SCREENSHOT_LOAD_WAIT` (default 12s for network).
+
+## Single capture
+
+```bash
+./scripts/capture-app-store-screenshots.sh   # current Simulator screen
+./scripts/verify-fresh-install.sh            # build + fresh install smoke test
+```
 
 Apple requires 6.7" and other sizes for App Store Connect — export at required dimensions before submit.

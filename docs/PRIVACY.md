@@ -65,6 +65,8 @@ We may update this policy. The “Last updated” date will change when we do.
 
 ## Contact
 
-Replace with your support email before publishing:
+Questions about privacy? Open an issue on GitHub:
 
-**Email:** support@yourdomain.com
+**GitHub:** [github.com/oobaretin/Birthmate/issues](https://github.com/oobaretin/Birthmate/issues)
+
+**Public URL (App Store):** [https://oobaretin.github.io/Birthmate/](https://oobaretin.github.io/Birthmate/)

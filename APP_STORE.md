@@ -36,6 +36,6 @@ birthday, birthmates, on this day, history, famous birthdays, who shares my birt
 
 - [ ] Subtitle and description finalized in App Store Connect
 - [ ] Screenshots for required device sizes
-- [ ] Privacy policy URL (if collecting sign-in / community data)
+- [ ] Privacy policy URL (if collecting sign-in / community data) — **https://oobaretin.github.io/Birthmate/**
 - [ ] `Info.plist` secrets not committed; Supabase keys configured for production
 - [ ] Test onboarding → welcome → main tabs on a fresh install

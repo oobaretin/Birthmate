@@ -30,10 +30,11 @@ These features work on Simulator and free Personal Team today.
 - [x] **Fresh-install test** — `./scripts/verify-fresh-install.sh` (PASS 2026-07-30)
 - [ ] **Network edge cases** — airplane mode, slow Wi‑Fi, pull-to-refresh recovery (manual in Simulator)
 - [x] **Multiple birth dates** — Settings → Change Birthday clears date and returns to onboarding (code verified)
-- [x] **Screenshots** — onboarding captured in `AppStoreScreenshots/`; complete remaining tabs manually
-- [ ] **App icon 1024×1024** — export native resolution (current icon upscaled from 500px)
-- [x] **Privacy policy** — draft in `docs/PRIVACY.md` (host publicly and add URL to App Store Connect)
+- [x] **Screenshots** — `./scripts/capture-all-screenshots.sh` → `AppStoreScreenshots/` (02–08)
+- [x] **App icon 1024×1024** — `AppIcon.appiconset/AppIcon.png` (1024×1024; upscaled from 500px logo source)
+- [x] **Privacy policy** — draft in `docs/PRIVACY.md`; public URL: https://oobaretin.github.io/Birthmate/ (enable GitHub Pages → source: GitHub Actions)
 - [x] **Commit local changes** — committed; `Info.plist` Supabase keys kept local only
+- [x] **Push to GitHub** — `git push origin main` (includes GitHub Pages workflow for privacy policy)
 - [ ] **Real device test** (optional) — free Apple ID, 7-day install on your iPhone
 
 ---
@@ -81,12 +82,7 @@ Hold App Store submit until Sign in with Apple + Supabase + App Groups all work.
 
 ## Current uncommitted work (local only)
 
-These changes exist on disk but are not on `origin/main` yet:
-
-- Merge crash fix, Today count fix, welcome `@AppStorage`
-- Death leaf indicators, logo + `AppLogoView`
-- New assets (AppIcon, AppLogo, LaunchIcon)
-- `APP_STORE.md`, `V1_SCOPE.md` (this file)
+- `Birthmate/Resources/Info.plist` — Supabase keys (never commit)
 
 **Never commit:** `Birthmate/Resources/Info.plist` if it contains Supabase keys (use env-specific config or `.gitignore` + template).
 

@@ -45,5 +45,17 @@ struct MainTabView: View {
             .presentationDragIndicator(.visible)
             .presentationDetents([.large])
         }
+        #if DEBUG
+        .onAppear {
+            if ScreenshotLaunchConfig.showWelcome {
+                hasSeenWelcomeTips = false
+            } else if ScreenshotLaunchConfig.skipWelcome {
+                hasSeenWelcomeTips = true
+            }
+            if let tab = ScreenshotLaunchConfig.selectedTab {
+                selectedTab = tab
+            }
+        }
+        #endif
     }
 }

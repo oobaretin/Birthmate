@@ -33,6 +33,7 @@
 		5B72E7942D738DBCAFC94878 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC49677A19F1BEDEFB4902E /* MainTabView.swift */; };
 		629FC240546B809319635BEF /* ActionFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7F4F2D97C3BFF6D80A2450 /* ActionFeedback.swift */; };
 		654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */; };
+		A1B2C3D4E5F6789012345678 /* ScreenshotLaunchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F678901234567890 /* ScreenshotLaunchConfig.swift */; };
 		6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */; };
 		826A2DB062E36F500BD643A5 /* BirthdayBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */; };
 		85653F834D575790906083ED /* BirthmateWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BA6199BAC88AE9FF7033B122 /* BirthmateWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -115,6 +116,7 @@
 		70146C39311A6A8BDEF3B473 /* CommunityMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityMember.swift; sourceTree = "<group>"; };
 		717668A48EE6A60FBE0F317E /* BirthmateWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BirthmateWidget.entitlements; sourceTree = "<group>"; };
 		71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatting.swift; sourceTree = "<group>"; };
+		B2C3D4E5F678901234567890 /* ScreenshotLaunchConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotLaunchConfig.swift; sourceTree = "<group>"; };
 		7B2FBEA508D09F2498D0157C /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		83B57C3E7215848A179DF02D /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		E7F6A5B4C3D291807060504 /* AppLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogoView.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				8B7F4F2D97C3BFF6D80A2450 /* ActionFeedback.swift */,
 				4C3A87A88A3A2C6FB0D7D465 /* AppleSignInNonce.swift */,
 				71EC05626BA89D58ED0E7FC5 /* DateFormatting.swift */,
+				B2C3D4E5F678901234567890 /* ScreenshotLaunchConfig.swift */,
 				988966F1AC78B38FEB559DEA /* KeychainStore.swift */,
 			);
 			path = Utilities;
@@ -520,6 +523,7 @@
 				4EDB07749C4A45EF1934909E /* CommunityView.swift in Sources */,
 				04A489B7CE87CB5780F220F3 /* CommunityViewModel.swift in Sources */,
 				654154FD84496FD17FB4B2A4 /* DateFormatting.swift in Sources */,
+				A1B2C3D4E5F6789012345678 /* ScreenshotLaunchConfig.swift in Sources */,
 				34AC489E14CF12857AD23402 /* FeedStateViews.swift in Sources */,
 				6911A4A1A16DAD88BE7CA6AA /* HomeBirthsViewModel.swift in Sources */,
 				9CCD0587B0B1D2F2FD8754CB /* HomeView.swift in Sources */,
