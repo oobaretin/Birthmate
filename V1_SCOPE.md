@@ -33,7 +33,7 @@ These features work on Simulator and free Personal Team today.
 - [x] **Screenshots** — onboarding captured in `AppStoreScreenshots/`; complete remaining tabs manually
 - [ ] **App icon 1024×1024** — export native resolution (current icon upscaled from 500px)
 - [x] **Privacy policy** — draft in `docs/PRIVACY.md` (host publicly and add URL to App Store Connect)
-- [ ] **Commit local changes** — run commit excluding `Info.plist` secrets
+- [x] **Commit local changes** — committed; `Info.plist` Supabase keys kept local only
 - [ ] **Real device test** (optional) — free Apple ID, 7-day install on your iPhone
 
 ---
