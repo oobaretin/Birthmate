@@ -19,56 +19,66 @@ struct OnboardingView: View {
         return range.count
     }
 
+    private var selectedDateLabel: String {
+        DateFormatting.birthdate(month: selectedMonth, day: selectedDay)
+    }
+
     var body: some View {
         ZStack {
             BirthmateTheme.onboardingGradient
                 .ignoresSafeArea()
 
-            VStack(spacing: 32) {
+            VStack(spacing: 28) {
                 Spacer()
 
                 VStack(spacing: 16) {
-                    Image("AppLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 120, height: 120)
-                        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                        .shadow(color: BirthmateTheme.accent.opacity(0.25), radius: 12, y: 6)
+                    AppLogoView(size: 128, cornerRadius: 28)
 
                     Text("Birthmate")
                         .font(.largeTitle.bold())
 
-                    Text("Pick your birthday to discover who shares it and what happened in history on your day.")
+                    Text("Choose your birth month and day to discover who shares it and what happened in history on your day.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                 }
 
-                VStack(spacing: 0) {
-                    HStack(spacing: 0) {
-                        Picker("Month", selection: $selectedMonth) {
-                            ForEach(1...12, id: \.self) { month in
-                                Text(months[month - 1]).tag(month)
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(maxWidth: .infinity)
+                VStack(spacing: 16) {
+                    Text(selectedDateLabel)
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(BirthmateTheme.accent)
+                        .animation(.easeInOut(duration: 0.2), value: selectedDateLabel)
 
-                        Picker("Day", selection: $selectedDay) {
-                            ForEach(1...daysInMonth, id: \.self) { day in
-                                Text("\(day)").tag(day)
+                    HStack(spacing: 0) {
+                        datePickerColumn(title: "Month") {
+                            Picker("Month", selection: $selectedMonth) {
+                                ForEach(1...12, id: \.self) { month in
+                                    Text(months[month - 1]).tag(month)
+                                }
                             }
+                            .pickerStyle(.wheel)
                         }
-                        .pickerStyle(.wheel)
-                        .frame(maxWidth: .infinity)
+
+                        Divider()
+                            .padding(.vertical, 12)
+
+                        datePickerColumn(title: "Day") {
+                            Picker("Day", selection: $selectedDay) {
+                                ForEach(1...daysInMonth, id: \.self) { day in
+                                    Text("\(day)").tag(day)
+                                }
+                            }
+                            .pickerStyle(.wheel)
+                        }
                     }
-                    .frame(height: 180)
+                    .frame(height: 168)
                     .onChange(of: selectedMonth) { _, _ in
                         if selectedDay > daysInMonth { selectedDay = daysInMonth }
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.vertical, 12)
+                .padding(.horizontal, 8)
                 .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .padding(.horizontal, 24)
@@ -98,6 +108,36 @@ struct OnboardingView: View {
                 .padding(.bottom, 24)
             }
         }
+        .onAppear(perform: applyInitialSelection)
+    }
+
+    private func datePickerColumn<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: 6) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+                .tracking(0.6)
+            content()
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func applyInitialSelection() {
+        if birthdateStore.hasBirthdate,
+           let month = birthdateStore.month,
+           let day = birthdateStore.day {
+            selectedMonth = month
+            selectedDay = day
+            return
+        }
+
+        let today = Calendar.current.dateComponents([.month, .day], from: Date())
+        selectedMonth = today.month ?? 1
+        selectedDay = today.day ?? 1
     }
 }
 

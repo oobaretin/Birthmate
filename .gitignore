@@ -3,6 +3,7 @@
 *.xcworkspace/xcuserdata/
 *.xcuserstate
 DerivedData/
+.derivedData/
 build/
 *.pbxuser
 *.mode1v3
@@ -20,3 +21,6 @@ Package.resolved
 
 # macOS
 .DS_Store
+
+# Cursor / local debug
+.cursor/

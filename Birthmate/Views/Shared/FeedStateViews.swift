@@ -307,6 +307,33 @@ struct FeedEmptyView: View {
     }
 }
 
+struct HistoryDeathMarker: View {
+    enum Style {
+        case compact
+        case badge
+    }
+
+    var style: Style = .compact
+
+    var body: some View {
+        switch style {
+        case .compact:
+            Image(systemName: "leaf.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("Death on this day")
+        case .badge:
+            Label("Died on this day", systemImage: "leaf.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(Color.secondary.opacity(0.12))
+                .clipShape(Capsule())
+        }
+    }
+}
+
 struct StatBadge: View {
     let value: Int
     let label: String

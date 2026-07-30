@@ -48,7 +48,7 @@ struct OnThisDayView: View {
                                         if viewModel.allSelected.contains(where: { $0.id == item.id }) && viewModel.filter != .events {
                                             SelectedEventRow(item: item)
                                         } else {
-                                            EventRow(item: item)
+                                            EventRow(item: item, isDeath: viewModel.isDeath(item))
                                         }
                                     }
                                 }
@@ -80,7 +80,11 @@ struct OnThisDayView: View {
             }
             .searchable(text: $searchText, prompt: "Search events")
             .navigationDestination(for: OnThisDayItem.self) { item in
-                EventDetailView(item: item, dateLabel: formattedDate)
+                EventDetailView(
+                    item: item,
+                    dateLabel: formattedDate,
+                    isDeath: viewModel.isDeath(item)
+                )
             }
         }
         .task { await reload() }
@@ -153,27 +157,36 @@ struct SelectedEventRow: View {
 
 struct EventRow: View {
     let item: OnThisDayItem
+    var isDeath: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            if let year = item.eventYear {
-                Text(String(year))
-                    .font(.caption.bold().monospacedDigit())
-                    .foregroundStyle(BirthmateTheme.accent)
-                    .frame(width: 44, alignment: .leading)
+            VStack(alignment: .leading, spacing: 4) {
+                if isDeath {
+                    HistoryDeathMarker()
+                }
+                if let year = item.eventYear {
+                    Text(String(year))
+                        .font(.caption.bold().monospacedDigit())
+                        .foregroundStyle(isDeath ? .secondary : BirthmateTheme.accent)
+                }
             }
+            .frame(width: 44, alignment: .leading)
 
             Text(item.displayText)
                 .font(.body)
                 .lineLimit(3)
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(isDeath ? "Death in \(item.eventYear.map(String.init) ?? ""), \(item.displayText)" : item.displayText)
     }
 }
 
 struct EventDetailView: View {
     let item: OnThisDayItem
     let dateLabel: String
+    var isDeath: Bool = false
 
     var body: some View {
         ScrollView {
@@ -185,10 +198,14 @@ struct EventDetailView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .padding(.horizontal)
 
+                if isDeath {
+                    HistoryDeathMarker(style: .badge)
+                }
+
                 if let year = item.eventYear {
                     Text(String(year))
                         .font(.title2.bold().monospacedDigit())
-                        .foregroundStyle(BirthmateTheme.accent)
+                        .foregroundStyle(isDeath ? .secondary : BirthmateTheme.accent)
                 }
 
                 Text(item.displayText)

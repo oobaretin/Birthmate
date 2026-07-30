@@ -57,10 +57,10 @@ enum OnThisDayMerger {
     /// Combines multiple On This Day lists, deduplicating by Wikipedia title or name+year.
     /// Keeps the entry with richer page data (thumbnail, extract, etc.).
     static func merge(_ lists: [OnThisDayItem]...) -> [OnThisDayItem] {
-        merge(lists.flatMap { $0 })
+        mergeLists(lists)
     }
 
-    static func merge(_ lists: [[OnThisDayItem]]) -> [OnThisDayItem] {
+    private static func mergeLists(_ lists: [[OnThisDayItem]]) -> [OnThisDayItem] {
         var byKey: [String: OnThisDayItem] = [:]
         for list in lists {
             for item in list {

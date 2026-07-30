@@ -51,7 +51,11 @@ struct TodayView: View {
                 PersonDetailView(item: route.item, dateLabel: formattedDate)
             }
             .navigationDestination(for: TodayEventRoute.self) { route in
-                EventDetailView(item: route.item, dateLabel: formattedDate)
+                EventDetailView(
+                    item: route.item,
+                    dateLabel: formattedDate,
+                    isDeath: viewModel.isDeath(route.item)
+                )
             }
         }
         .task(id: todayRefreshKey) { await reload(forceRefresh: false) }
@@ -160,10 +164,14 @@ struct TodayView: View {
             }
 
             NavigationLink(value: TodayEventRoute(item: event)) {
-                FeaturedEventCard(item: event)
+                FeaturedEventCard(item: event, isDeath: viewModel.isDeath(event))
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Featured event, \(event.displayText)")
+            .accessibilityLabel(
+                viewModel.isDeath(event)
+                    ? "Featured death on this day, \(event.displayText)"
+                    : "Featured event, \(event.displayText)"
+            )
         }
     }
 
@@ -340,15 +348,21 @@ struct FeaturedPersonCard: View {
 
 struct FeaturedEventCard: View {
     let item: OnThisDayItem
+    var isDeath: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 14) {
-            if let year = item.eventYear {
-                Text(String(year))
-                    .font(.title3.bold().monospacedDigit())
-                    .foregroundStyle(BirthmateTheme.accent)
-                    .frame(width: 56, alignment: .leading)
+            VStack(alignment: .leading, spacing: 6) {
+                if isDeath {
+                    HistoryDeathMarker()
+                }
+                if let year = item.eventYear {
+                    Text(String(year))
+                        .font(.title3.bold().monospacedDigit())
+                        .foregroundStyle(isDeath ? .secondary : BirthmateTheme.accent)
+                }
             }
+            .frame(width: 56, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(item.displayText)

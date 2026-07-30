@@ -8,11 +8,7 @@ struct ShareBirthmateCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Image("AppLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 36, height: 36)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                AppLogoView(size: 44, cornerRadius: 10, showsShadow: false)
                 Text("Birthmate")
                     .font(.headline)
                 Spacer()

@@ -25,6 +25,10 @@ final class OnThisDayViewModel: ObservableObject {
 
     var highlightCount: Int { allSelected.count }
 
+    func isDeath(_ item: OnThisDayItem) -> Bool {
+        allDeaths.contains { $0.id == item.id }
+    }
+
     func load(month: Int, day: Int) async {
         errorMessage = nil
 

@@ -33,36 +33,19 @@ final class TodayViewModel: ObservableObject {
         loadedMonth = month
         loadedDay = day
 
-        var births: [OnThisDayItem] = cachedBirths
-        var events: [OnThisDayItem] = cachedEvents
-        var highlights: [OnThisDayItem] = cachedHighlights
-        var deaths: [OnThisDayItem] = cachedDeaths
-        var updatedAt: Date?
-
-        if !forceRefresh,
-           let cachedBirths = WikidataService.shared.cachedBirths(month: month, day: day),
-           cachedBirths.isComplete,
-           !cachedBirths.items.isEmpty {
-            let wikiBirths = try? await APIService.shared.fetch(type: .births, month: month, day: day, forceRefresh: false)
-            births = OnThisDayMerger.merge(cachedBirths.items, wikiBirths?.items ?? [])
-            updatedAt = cachedBirths.fetchedAt
-            storeAndApply(births: births, events: events, highlights: highlights, deaths: deaths, month: month, day: day)
-        }
-
-        if !forceRefresh,
-           let cachedEvents = APIService.shared.cachedEntry(type: .events, month: month, day: day),
-           let cachedSelected = APIService.shared.cachedEntry(type: .selected, month: month, day: day),
-           let cachedDeaths = APIService.shared.cachedEntry(type: .deaths, month: month, day: day) {
-            events = cachedEvents.items.filter(\.hasValidEventYear)
-            highlights = cachedSelected.items.filter(\.hasValidEventYear)
-            deaths = cachedDeaths.items.filter(\.hasValidEventYear)
-            updatedAt = max(
-                updatedAt ?? .distantPast,
-                cachedEvents.fetchedAt,
-                cachedSelected.fetchedAt,
-                cachedDeaths.fetchedAt
+        if !forceRefresh, let cached = await cachedPayload(month: month, day: day) {
+            storeAndApply(
+                births: cached.births,
+                events: cached.events,
+                highlights: cached.highlights,
+                deaths: cached.deaths,
+                month: month,
+                day: day,
+                shouldRepickFeatured: isInitialLoad
             )
-            storeAndApply(births: births, events: events, highlights: highlights, deaths: deaths, month: month, day: day)
+            if let fetchedAt = cached.fetchedAt {
+                lastUpdated = fetchedAt
+            }
         }
 
         do {
@@ -92,19 +75,23 @@ final class TodayViewModel: ObservableObject {
                 selectedTask,
                 deathsTask
             )
-            births = freshBirths
-            events = freshEvents.items.filter(\.hasValidEventYear)
-            highlights = freshSelected.items.filter(\.hasValidEventYear)
-            deaths = freshDeaths.items.filter(\.hasValidEventYear)
-            updatedAt = max(
+
+            storeAndApply(
+                births: freshBirths,
+                events: freshEvents.items.filter(\.hasValidEventYear),
+                highlights: freshSelected.items.filter(\.hasValidEventYear),
+                deaths: freshDeaths.items.filter(\.hasValidEventYear),
+                month: month,
+                day: day,
+                shouldRepickFeatured: isInitialLoad
+            )
+            lastUpdated = max(
                 freshEvents.fetchedAt,
                 freshSelected.fetchedAt,
                 freshDeaths.fetchedAt
             )
-            storeAndApply(births: births, events: events, highlights: highlights, deaths: deaths, month: month, day: day)
-            lastUpdated = updatedAt ?? Date()
         } catch {
-            if featuredPerson == nil && featuredEvent == nil {
+            if isInitialLoad, featuredPerson == nil, featuredEvent == nil, cachedBirths.isEmpty {
                 errorMessage = error.localizedDescription
             }
         }
@@ -119,6 +106,62 @@ final class TodayViewModel: ObservableObject {
     func showAnotherFeaturedEvent() {
         guard loadedMonth != nil, loadedDay != nil else { return }
         featuredEvent = randomEvent(excluding: featuredEvent?.id)
+    }
+
+    private struct CachedPayload {
+        let births: [OnThisDayItem]
+        let events: [OnThisDayItem]
+        let highlights: [OnThisDayItem]
+        let deaths: [OnThisDayItem]
+        let fetchedAt: Date?
+    }
+
+    private func cachedPayload(month: Int, day: Int) async -> CachedPayload? {
+        var births: [OnThisDayItem] = []
+        var events: [OnThisDayItem] = []
+        var highlights: [OnThisDayItem] = []
+        var deaths: [OnThisDayItem] = []
+        var fetchedAt: Date?
+
+        if let wikidata = WikidataService.shared.cachedBirths(month: month, day: day),
+           wikidata.isComplete,
+           !wikidata.items.isEmpty {
+            let wikiBirths = try? await APIService.shared.fetch(
+                type: .births,
+                month: month,
+                day: day,
+                forceRefresh: false
+            )
+            births = OnThisDayMerger.merge(wikidata.items, wikiBirths?.items ?? [])
+            fetchedAt = wikidata.fetchedAt
+        }
+
+        if let cachedEvents = APIService.shared.cachedEntry(type: .events, month: month, day: day) {
+            events = cachedEvents.items.filter(\.hasValidEventYear)
+            fetchedAt = max(fetchedAt ?? .distantPast, cachedEvents.fetchedAt)
+        }
+
+        if let cachedSelected = APIService.shared.cachedEntry(type: .selected, month: month, day: day) {
+            highlights = cachedSelected.items.filter(\.hasValidEventYear)
+            fetchedAt = max(fetchedAt ?? .distantPast, cachedSelected.fetchedAt)
+        }
+
+        if let cachedDeaths = APIService.shared.cachedEntry(type: .deaths, month: month, day: day) {
+            deaths = cachedDeaths.items.filter(\.hasValidEventYear)
+            fetchedAt = max(fetchedAt ?? .distantPast, cachedDeaths.fetchedAt)
+        }
+
+        guard !births.isEmpty || !events.isEmpty || !highlights.isEmpty || !deaths.isEmpty else {
+            return nil
+        }
+
+        return CachedPayload(
+            births: births,
+            events: events,
+            highlights: highlights,
+            deaths: deaths,
+            fetchedAt: fetchedAt
+        )
     }
 
     private func loadBirths(month: Int, day: Int, forceRefresh: Bool) async throws -> [OnThisDayItem] {
@@ -139,7 +182,11 @@ final class TodayViewModel: ObservableObject {
             )
             wikidataItems = fresh.items
         } catch {
-            wikidataItems = []
+            if let cached = WikidataService.shared.cachedBirths(month: month, day: day),
+               cached.isComplete,
+               !cached.items.isEmpty {
+                wikidataItems = cached.items
+            }
         }
 
         let wikiItems = (try? await wikiTask)?.items ?? []
@@ -167,20 +214,23 @@ final class TodayViewModel: ObservableObject {
         highlights: [OnThisDayItem],
         deaths: [OnThisDayItem],
         month: Int,
-        day: Int
+        day: Int,
+        shouldRepickFeatured: Bool
     ) {
-        cachedBirths = births
+        cachedBirths = OnThisDayMerger.merge(cachedBirths, births)
         cachedEvents = events
         cachedHighlights = highlights
         cachedDeaths = deaths
         loadedMonth = month
         loadedDay = day
 
-        birthCount = births.count
+        birthCount = cachedBirths.count
         highlightCount = highlights.count
         eventCount = uniqueHistoryCount(highlights: highlights, events: events, deaths: deaths)
 
-        repickFeatured()
+        if shouldRepickFeatured {
+            repickFeaturedItems()
+        }
         syncWidgetSnapshot()
     }
 
@@ -199,7 +249,7 @@ final class TodayViewModel: ObservableObject {
         return count
     }
 
-    private func repickFeatured() {
+    private func repickFeaturedItems() {
         featuredPerson = randomPerson(excluding: nil)
         featuredEvent = randomEvent(excluding: nil)
     }
@@ -215,6 +265,10 @@ final class TodayViewModel: ObservableObject {
         let pool = combined.filter { $0.id != excludedID }
         guard !pool.isEmpty else { return combined.randomElement() }
         return pool.randomElement()
+    }
+
+    func isDeath(_ item: OnThisDayItem) -> Bool {
+        cachedDeaths.contains { $0.id == item.id }
     }
 
     private func eventPool() -> [OnThisDayItem] {
