@@ -274,6 +274,9 @@ struct PersonDetailView: View {
                     Text(item.displayName)
                         .font(.title.bold())
 
+                    ShareBirthmateCardLink(item: item, dateLabel: dateLabel)
+                        .padding(.vertical, 4)
+
                     Text(bodyText)
                         .font(.body)
                         .foregroundStyle(.secondary)
@@ -299,8 +302,6 @@ struct PersonDetailView: View {
                         }
                         .tint(BirthmateTheme.accent)
                     }
-
-                    ShareBirthmateCardLink(item: item, dateLabel: dateLabel)
 
                     if let urlString = item.primaryPage?.contentUrls?.desktop?.page,
                        let url = URL(string: urlString) {

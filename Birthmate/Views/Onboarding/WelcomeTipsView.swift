@@ -23,31 +23,21 @@ struct WelcomeTipsView: View {
                             tipCard(
                                 icon: "sparkles",
                                 title: "Today",
-                                message: "Daily highlights — a featured birthmate and history from your day."
+                                message: "Your daily birthmate and history highlight — tap Another to shuffle."
                             )
                             tipCard(
                                 icon: "person.2.fill",
                                 title: "Birthmates",
-                                message: "Browse everyone born on your birthday. Tap a name to read more."
+                                message: "Everyone born on your day. Favorite anyone you want to keep."
                             )
                             tipCard(
                                 icon: "clock.fill",
-                                title: "History",
-                                message: "Events and milestones that happened on your day."
-                            )
-                            tipCard(
-                                icon: "person.3.fill",
-                                title: "Circle",
-                                message: "Preview Birthday Circle — sample people who share your day."
-                            )
-                            tipCard(
-                                icon: "heart.fill",
-                                title: "Save favorites",
-                                message: "Tap Favorite on any birthmate to save them. Filter by Favorites on the Birthmates tab."
+                                title: "On This Day",
+                                message: "Events, highlights, and notable moments from history on your date."
                             )
                         }
 
-                        Text("You can change your birthday and notifications anytime in Settings.")
+                        Text("Birthday Circle preview lives on Today. Change your date anytime in Settings.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -88,7 +78,7 @@ struct WelcomeTipsView: View {
                     .foregroundStyle(BirthmateTheme.accent)
             }
 
-            Text("Here is a quick tour of what you can do.")
+            Text("Three places to explore your birthday.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

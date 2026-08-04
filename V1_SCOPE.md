@@ -2,9 +2,11 @@
 
 Use this to decide what to finish **before** vs **after** Apple Developer Program ($99/year).
 
-**Last reviewed:** 2026-07-30  
+**Last reviewed:** 2026-08-04  
+**Product roadmap:** [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md)  
 **Tests:** 11/11 passing (`WikiFormattingTests`)  
-**Supabase:** configured in local `Info.plist` (do not commit keys)
+**Supabase:** configured in local `Info.plist` (do not commit keys)  
+**Status:** Paused until Apple Developer Program enrollment
 
 ---
 
@@ -18,7 +20,7 @@ These features work on Simulator and free Personal Team today.
 | Welcome quick tour | Sheet | ✅ Done | Shows after first launch |
 | Today highlights | Today | ✅ Done | Featured birthmate + history; shuffle |
 | Birthmates list | Birthmates | ✅ Done | Wikipedia + Wikidata merge, favorites |
-| History timeline | History | ✅ Done | Events, highlights, deaths (leaf icon) |
+| History timeline | On This Day | ✅ Done | Events, highlights, deaths (leaf icon) |
 | Search & filters | History / Birthmates | ✅ Done | Era sections, living/historical/favorites |
 | Share card | Detail | ✅ Done | ShareLink with branded card |
 | Settings | Settings | ✅ Done | Change birthday, notifications toggle |
@@ -64,9 +66,9 @@ Blocked or unreliable until paid membership.
 
 ## Recommended launch strategy
 
-### Option A — Ship core first (recommended)
+### Option A — Ship core first (recommended) ← **locked in**
 
-**v1.0:** Birthmates + History + Today (no live Circle). Circle tab stays in **preview/demo mode** with honest copy (already in app).
+**v1.0:** Birthmates + On This Day + Today. Circle stays **off tab bar** — preview sheet only until Phase 3 ([PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md)).
 
 **Pros:** Ship sooner; core value is strong; no auth complexity on day one.  
 **Cons:** Circle is demo-only until v1.1.

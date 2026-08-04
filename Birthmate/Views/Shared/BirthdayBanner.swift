@@ -18,20 +18,22 @@ struct BirthdayBanner: View {
     }
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             Image(systemName: isBirthdayToday ? "party.popper.fill" : "calendar")
+                .font(.title3)
                 .foregroundStyle(BirthmateTheme.accent)
+                .symbolEffect(.bounce, value: isBirthdayToday)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 if isBirthdayToday {
                     Text("Happy Birthday!")
-                        .font(.subheadline.weight(.semibold))
+                        .font(.headline)
                     Text("You're celebrating with everyone born on \(birthdayLabel).")
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 } else {
                     Text("Today is \(todayLabel)")
-                        .font(.subheadline.weight(.medium))
+                        .font(.subheadline.weight(.semibold))
                     Text("Your day is \(birthdayLabel)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -40,9 +42,22 @@ struct BirthdayBanner: View {
 
             Spacer()
         }
-        .padding(12)
-        .background(BirthmateTheme.accent.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .padding(14)
+        .background {
+            if isBirthdayToday {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(BirthmateTheme.birthdayGradient)
+            } else {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(BirthmateTheme.accent.opacity(0.1))
+            }
+        }
+        .overlay {
+            if isBirthdayToday {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(BirthmateTheme.accent.opacity(0.25), lineWidth: 1)
+            }
+        }
         .accessibilityElement(children: .combine)
     }
 }

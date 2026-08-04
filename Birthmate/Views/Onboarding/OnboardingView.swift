@@ -3,6 +3,7 @@ import SwiftUI
 struct OnboardingView: View {
     @EnvironmentObject var birthdateStore: BirthdateStore
     @EnvironmentObject var notificationManager: NotificationManager
+    @StateObject private var previewModel = OnboardingPreviewModel()
     @State private var selectedMonth: Int = 1
     @State private var selectedDay: Int = 1
 
@@ -28,11 +29,11 @@ struct OnboardingView: View {
             BirthmateTheme.onboardingGradient
                 .ignoresSafeArea()
 
-            VStack(spacing: 28) {
-                Spacer()
+            VStack(spacing: 20) {
+                Spacer(minLength: 8)
 
-                VStack(spacing: 16) {
-                    AppLogoView(size: 128, cornerRadius: 28)
+                VStack(spacing: 12) {
+                    AppLogoView(size: 112, cornerRadius: 24)
 
                     Text("Birthmate")
                         .font(.largeTitle.bold())
@@ -42,11 +43,15 @@ struct OnboardingView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
+
+                    Text("No birth year needed — just month and day.")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(BirthmateTheme.accent.opacity(0.85))
                 }
 
-                VStack(spacing: 16) {
+                VStack(spacing: 12) {
                     Text(selectedDateLabel)
-                        .font(.title3.weight(.semibold))
+                        .font(.title2.weight(.bold))
                         .foregroundStyle(BirthmateTheme.accent)
                         .animation(.easeInOut(duration: 0.2), value: selectedDateLabel)
 
@@ -72,10 +77,22 @@ struct OnboardingView: View {
                             .pickerStyle(.wheel)
                         }
                     }
-                    .frame(height: 168)
+                    .frame(height: 148)
                     .onChange(of: selectedMonth) { _, _ in
                         if selectedDay > daysInMonth { selectedDay = daysInMonth }
+                        previewModel.load(month: selectedMonth, day: selectedDay)
                     }
+                    .onChange(of: selectedDay) { _, _ in
+                        previewModel.load(month: selectedMonth, day: selectedDay)
+                    }
+
+                    OnboardingPreviewCard(
+                        dateLabel: selectedDateLabel,
+                        sampleName: previewModel.sampleName,
+                        birthCount: previewModel.birthCount,
+                        sampleEvent: previewModel.sampleEvent,
+                        isLoading: previewModel.isLoading
+                    )
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal, 8)
@@ -83,7 +100,7 @@ struct OnboardingView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .padding(.horizontal, 24)
 
-                Spacer()
+                Spacer(minLength: 8)
 
                 Button {
                     birthdateStore.save(month: selectedMonth, day: selectedDay)
@@ -96,7 +113,7 @@ struct OnboardingView: View {
                         }
                     }
                 } label: {
-                    Text("Continue")
+                    Text("Discover my day")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -108,7 +125,13 @@ struct OnboardingView: View {
                 .padding(.bottom, 24)
             }
         }
-        .onAppear(perform: applyInitialSelection)
+        .onAppear {
+            applyInitialSelection()
+            previewModel.load(month: selectedMonth, day: selectedDay)
+        }
+        .onDisappear {
+            previewModel.cancel()
+        }
     }
 
     private func datePickerColumn<Content: View>(

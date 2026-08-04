@@ -50,6 +50,9 @@
 		C6E3943ABEB2377806161435 /* AppGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4119085DFABD3C095C497B1 /* AppGroupStorage.swift */; };
 		C702026F10675611C1CBFE9D /* WikipediaSummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8855379964A4237C4A8D9A /* WikipediaSummaryService.swift */; };
 		C91590C2544F6420A7478B1F /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B57C3E7215848A179DF02D /* AppTab.swift */; };
+		C4D5E67890123456789012A /* OnboardingPreviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D5E678901234567890123 /* OnboardingPreviewModel.swift */; };
+		D5E6789012345678901234B /* DailyReminderPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E6789012345678901234A /* DailyReminderPromptView.swift */; };
+		E678901234567890123456C /* OnboardingPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E678901234567890123456B /* OnboardingPreviewCard.swift */; };
 		F8A2B3C4D5E678901234ABCD /* AppLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F6A5B4C3D291807060504 /* AppLogoView.swift */; };
 		CDDC97669FDDB2AB1524C57B /* BirthmateTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */; };
 		DBF04EC1B9088C0186155F77 /* CommunityMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70146C39311A6A8BDEF3B473 /* CommunityMember.swift */; };
@@ -119,6 +122,9 @@
 		B2C3D4E5F678901234567890 /* ScreenshotLaunchConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotLaunchConfig.swift; sourceTree = "<group>"; };
 		7B2FBEA508D09F2498D0157C /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		83B57C3E7215848A179DF02D /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
+		C4D5E678901234567890123 /* OnboardingPreviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPreviewModel.swift; sourceTree = "<group>"; };
+		D5E6789012345678901234A /* DailyReminderPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReminderPromptView.swift; sourceTree = "<group>"; };
+		E678901234567890123456B /* OnboardingPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPreviewCard.swift; sourceTree = "<group>"; };
 		E7F6A5B4C3D291807060504 /* AppLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogoView.swift; sourceTree = "<group>"; };
 		857D5093DED1ED012E57B72F /* SupabaseCommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseCommunityService.swift; sourceTree = "<group>"; };
 		8A31FD1D19D69490250C1610 /* Birthmate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Birthmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +168,7 @@
 				C3779C95388551ABE8D32EA5 /* CommunityViewModel.swift */,
 				1B275F7F8080940B3EFA46CD /* HomeBirthsViewModel.swift */,
 				1AF78FDC11F5A610DE35A8F1 /* OnThisDayViewModel.swift */,
+				C4D5E678901234567890123 /* OnboardingPreviewModel.swift */,
 				3DB6C1EB3B4932A760E51C14 /* TodayViewModel.swift */,
 			);
 			path = ViewModels;
@@ -301,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				E7F6A5B4C3D291807060504 /* AppLogoView.swift */,
+				E678901234567890123456B /* OnboardingPreviewCard.swift */,
 				E1AEE869EE4CF39C9C630E20 /* BirthdayBanner.swift */,
 				949BA1ABEC8A573554162AB0 /* BirthmateTheme.swift */,
 				C1C869FCDAB3CED3A5060CEA /* FeedStateViews.swift */,
@@ -366,6 +374,7 @@
 			isa = PBXGroup;
 			children = (
 				DE32870DCCD17DB03CCF78F6 /* OnboardingView.swift */,
+				D5E6789012345678901234A /* DailyReminderPromptView.swift */,
 				B38FE9BC39C46990CAE202C8 /* WelcomeTipsView.swift */,
 			);
 			path = Onboarding;
@@ -534,6 +543,9 @@
 				EF50AF8FDC49274D60BCF39A /* OnThisDayModels.swift in Sources */,
 				04075CB1702D35C993AD2276 /* OnThisDayView.swift in Sources */,
 				EA93D5C98B9F4C814E801D04 /* OnThisDayViewModel.swift in Sources */,
+				C4D5E67890123456789012A /* OnboardingPreviewModel.swift in Sources */,
+				D5E6789012345678901234B /* DailyReminderPromptView.swift in Sources */,
+				E678901234567890123456C /* OnboardingPreviewCard.swift in Sources */,
 				C62C8F4742C5D9CD45B14AE2 /* OnboardingView.swift in Sources */,
 				57F2DA49F24FBCD41D4005A3 /* ProfileStore.swift in Sources */,
 				BAA3419A6199DE8919615146 /* RootView.swift in Sources */,

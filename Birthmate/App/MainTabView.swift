@@ -21,16 +21,12 @@ struct MainTabView: View {
                 .tabItem { Label("Today", systemImage: "sparkles") }
                 .tag(AppTab.today)
 
-            CommunityView()
-                .tabItem { Label("Circle", systemImage: "person.3.fill") }
-                .tag(AppTab.community)
-
             HomeView()
                 .tabItem { Label("Birthmates", systemImage: "person.2.fill") }
                 .tag(AppTab.people)
 
             OnThisDayView()
-                .tabItem { Label("History", systemImage: "clock.fill") }
+                .tabItem { Label("On This Day", systemImage: "clock.fill") }
                 .tag(AppTab.history)
 
             SettingsView()

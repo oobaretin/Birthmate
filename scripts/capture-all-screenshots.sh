@@ -95,7 +95,7 @@ capture_tab() {
   local slug="$1"
   local arg="$2"
   echo "Capturing $slug..."
-  launch_with_args "-SkipWelcomeTips" "-ScreenshotTab=$arg"
+  launch_with_args "-SkipWelcomeTips" "-ScreenshotTab=$arg" "-SkipNotificationPrompt"
   sleep "$LOAD_WAIT"
   shot "$slug"
 }
@@ -104,11 +104,16 @@ capture_tab "03-today" "today"
 capture_tab "04-birthmates" "birthmates"
 capture_tab "05-history" "history"
 capture_tab "06-settings" "settings"
-capture_tab "07-circle" "circle"
+
+echo "Capturing Circle preview sheet..."
+seed_welcome_seen true
+launch_with_args "-SkipWelcomeTips" "-ScreenshotTab=today" "-ShowCircleSheet" "-SkipNotificationPrompt"
+sleep 3
+shot "07-circle"
 
 echo "Capturing welcome sheet..."
 seed_welcome_seen false
-launch_with_args "-ShowWelcomeTips"
+launch_with_args "-ShowWelcomeTips" "-SkipNotificationPrompt"
 sleep 3
 shot "08-welcome"
 

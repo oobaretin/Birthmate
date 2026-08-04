@@ -1,41 +1,88 @@
 # App Store listing notes
 
-Use this when preparing the App Store Connect listing for Birthmate.
+Use this when preparing App Store Connect for **v1** (personal discovery — no Circle in copy).
 
-## Subtitle (30 characters max — trim as needed)
+**Product strategy:** [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md)
 
-Discover who shares your birthday — and what happened in history on your day.
+---
 
-_Shorter options if needed:_
-- Who shares your birthday & your day in history
-- Birthmates & history on your day
+## Subtitle (30 characters max)
 
-## Promotional text / description angle
+**Recommended:** `Who shares your birthday?` (26 chars)
 
-Birthmate connects your birth date to famous birthmates, historical events, and “on this day” moments from Wikipedia — personalized to **your** day, not a generic timeline.
+Alternates:
+- Famous birthdays on your day (28)
+- Your day in history (19)
 
-**What users can do:**
-- Browse everyone born on their birthday (Wikipedia + Wikidata)
-- Explore history on their day — events, highlights, and notable deaths
-- Save favorite birthmates
-- Preview Birthday Circle (community feature)
+---
 
-## Keywords to weave in
+## Promotional text (170 chars, updatable without review)
 
-birthday, birthmates, on this day, history, famous birthdays, who shares my birthday, Wikipedia, historical events
+See who shares your birthday — and explore history on your day. Daily highlights, hundreds of birthmates, and favorites. No account required.
 
-## Screenshot / preview ideas
+---
 
-1. Onboarding — pick month and day
-2. Today — featured birthmate + history highlight
-3. Birthmates — list with favorites
-4. History — era sections with leaf icon on deaths
-5. Welcome / quick tour (optional)
+## Description (lead paragraph)
+
+Birthmate answers a simple question: **who shares your birthday?**
+
+Pick your month and day — no birth year needed — and explore famous birthmates, historical events, and “on this day” moments from Wikipedia, all personalized to **your** date.
+
+**What you can do:**
+- Get daily highlights on the Today tab — a featured birthmate and history moment
+- Browse everyone born on your birthday, with photos and bios
+- Explore what happened on your day across history
+- Save favorites and share branded cards with friends
+- Optional daily reminder to discover something new
+
+Birthmate uses public data from Wikipedia and Wikidata. Your birth year is never collected.
+
+---
+
+## Keywords (100 chars, comma-separated)
+
+```
+birthday,birthmates,famous birthdays,on this day,history,who shares my birthday,Wikipedia
+```
+
+---
+
+## Screenshot story (emotional order)
+
+Lead with identity, not chrome:
+
+1. **Hook** — “Who shares your birthday?” + one famous face (Today hero)
+2. **Proof** — Birthmates list with count (“847 on July 29”)
+3. **Depth** — On This Day history moment
+4. **Action** — Share card preview
+5. **Trust** — Onboarding date picker with live preview
+
+Assets: `./scripts/capture-all-screenshots.sh` → `AppStoreScreenshots/`
+
+---
+
+## v1 — do not include in listing
+
+- Birthday Circle / community / social
+- Sign in with Apple
+- “Preview mode” or backend features
+
+Add Circle to marketing only when live (Phase 3 in roadmap).
+
+---
 
 ## Before submit checklist
 
 - [ ] Subtitle and description finalized in App Store Connect
-- [ ] Screenshots for required device sizes
-- [ ] Privacy policy URL (if collecting sign-in / community data) — **https://oobaretin.github.io/Birthmate/**
-- [ ] `Info.plist` secrets not committed; Supabase keys configured for production
-- [ ] Test onboarding → welcome → main tabs on a fresh install
+- [ ] Screenshots for required device sizes (6.7", etc.)
+- [ ] Privacy policy URL — **https://oobaretin.github.io/Birthmate/**
+- [ ] App preview video (optional, 15–20s: pick date → face → share)
+- [ ] `Info.plist` production Supabase keys configured locally (never commit secrets)
+- [ ] Fresh install: onboarding → welcome → Today → share flow
+- [ ] TestFlight feedback pass (10+ testers)
+
+---
+
+## Support & contact
+
+Use GitHub Issues URL or support email in App Store Connect — match [docs/PRIVACY.md](docs/PRIVACY.md).

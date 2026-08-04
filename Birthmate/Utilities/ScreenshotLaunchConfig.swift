@@ -18,7 +18,7 @@ enum ScreenshotLaunchConfig {
         case "settings":
             return .settings
         case "circle", "community":
-            return .community
+            return nil
         default:
             return nil
         }
@@ -30,6 +30,14 @@ enum ScreenshotLaunchConfig {
 
     static var showWelcome: Bool {
         CommandLine.arguments.contains("-ShowWelcomeTips")
+    }
+
+    static var showCircleSheet: Bool {
+        CommandLine.arguments.contains("-ShowCircleSheet")
+    }
+
+    static var skipNotificationPrompt: Bool {
+        CommandLine.arguments.contains("-SkipNotificationPrompt")
     }
 }
 #endif

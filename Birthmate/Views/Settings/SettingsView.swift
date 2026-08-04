@@ -7,6 +7,7 @@ struct SettingsView: View {
     @EnvironmentObject var authStore: AuthStore
     @State private var showResetConfirmation = false
     @State private var profileSyncMessage: String?
+    @State private var showCirclePreview = false
 
     var body: some View {
         NavigationStack {
@@ -66,6 +67,12 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Button {
+                        showCirclePreview = true
+                    } label: {
+                        Label("Preview Birthday Circle", systemImage: "person.3.fill")
+                    }
+
                     TextField("Display name", text: $profileStore.displayName)
                         .textInputAutocapitalization(.words)
                         .autocorrectionDisabled()
@@ -99,7 +106,7 @@ struct SettingsView: View {
                     if BirthmateSecrets.appleSignInEnabled, BirthmateSecrets.isCommunityConfigured {
                         Text("Live community is enabled.")
                     } else {
-                        Text("Preview mode uses sample people. Live community will need Apple Developer Program membership later.")
+                        Text("Preview mode uses sample people. Live community requires Apple Developer Program membership.")
                     }
                 }
 
@@ -162,10 +169,28 @@ struct SettingsView: View {
             ) {
                 Button("Change Birthday", role: .destructive) {
                     notificationManager.cancelReminders()
+                    NotificationPromptStore.reset()
                     birthdateStore.clear()
                 }
                 Button("Cancel", role: .cancel) {}
             }
+            .sheet(isPresented: $showCirclePreview) {
+                NavigationStack {
+                    CommunityView()
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showCirclePreview = false }
+                            }
+                        }
+                }
+            }
+            #if DEBUG
+            .onAppear {
+                if ScreenshotLaunchConfig.showCircleSheet {
+                    showCirclePreview = true
+                }
+            }
+            #endif
         }
     }
 

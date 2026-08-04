@@ -70,7 +70,7 @@ struct OnThisDayView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack(spacing: 2) {
-                        Text("History")
+                        Text("On This Day")
                             .font(.headline)
                         Text("\(visibleCount) of \(viewModel.totalCount) on your day")
                             .font(.caption)
