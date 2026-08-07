@@ -3,6 +3,8 @@ import Foundation
 @MainActor
 final class OnboardingPreviewModel: ObservableObject {
     @Published var sampleName: String?
+    @Published var sampleThumbURL: String?
+    @Published var sampleWikiTitle: String?
     @Published var birthCount: Int?
     @Published var sampleEvent: String?
     @Published var isLoading = false
@@ -14,6 +16,8 @@ final class OnboardingPreviewModel: ObservableObject {
         loadTask = Task {
             isLoading = true
             sampleName = nil
+            sampleThumbURL = nil
+            sampleWikiTitle = nil
             birthCount = nil
             sampleEvent = nil
 
@@ -28,7 +32,11 @@ final class OnboardingPreviewModel: ObservableObject {
                 guard !Task.isCancelled else { return }
 
                 birthCount = births.items.count
-                sampleName = births.items.first.map(\.displayName)
+                if let first = births.items.first {
+                    sampleName = first.displayName
+                    sampleThumbURL = first.primaryPage?.thumbnail?.source
+                    sampleWikiTitle = first.primaryPage?.title
+                }
                 if let event = selected.items.first {
                     let text = event.displayText
                     sampleEvent = text.count > 120 ? String(text.prefix(117)) + "…" : text

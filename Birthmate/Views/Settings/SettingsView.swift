@@ -3,11 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var birthdateStore: BirthdateStore
     @EnvironmentObject var notificationManager: NotificationManager
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var authStore: AuthStore
     @State private var showResetConfirmation = false
-    @State private var profileSyncMessage: String?
-    @State private var showCirclePreview = false
 
     var body: some View {
         NavigationStack {
@@ -30,88 +26,8 @@ struct SettingsView: View {
                     Text("Your Birthday")
                 }
 
-                if profileStore.requiresSignIn {
-                    Section {
-                        if authStore.isSignedIn {
-                            SignedInBadge()
-                            Button("Sign Out", role: .destructive) {
-                                authStore.signOut()
-                            }
-                        } else {
-                            SignInWithAppleButtonView()
-                            if authStore.isLoading {
-                                HStack(spacing: 8) {
-                                    ProgressView()
-                                    Text("Connecting…")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            if let status = authStore.statusMessage {
-                                Text(status)
-                                    .font(.caption)
-                                    .foregroundStyle(BirthmateTheme.accent)
-                            }
-                            if let error = authStore.errorMessage {
-                                Text(error)
-                                    .font(.caption)
-                                    .foregroundStyle(.red)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                        }
-                    } header: {
-                        Text("Account")
-                    } footer: {
-                        Text("Sign in with Apple to join Birthday Circle and connect with friends.")
-                    }
-                }
-
                 Section {
-                    Button {
-                        showCirclePreview = true
-                    } label: {
-                        Label("Preview Birthday Circle", systemImage: "person.3.fill")
-                    }
-
-                    TextField("Display name", text: $profileStore.displayName)
-                        .textInputAutocapitalization(.words)
-                        .autocorrectionDisabled()
-
-                    if let twin = profileStore.famousTwinName {
-                        LabeledContent("Famous twin", value: twin)
-                    }
-
-                    Toggle(isOn: $profileStore.isDiscoverable) {
-                        Label("Appear in Birthday Circle", systemImage: "person.crop.circle.badge.checkmark")
-                    }
-
-                    Toggle(isOn: $profileStore.discoverOthers) {
-                        Label("Discover others on my day", systemImage: "person.3.fill")
-                    }
-
-                    if profileStore.isDiscoverable || profileStore.discoverOthers {
-                        Text("Only your month, day, and display name are shared. Birth year is never uploaded.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    if let profileSyncMessage {
-                        Text(profileSyncMessage)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                } header: {
-                    Text("Birthday Circle")
-                } footer: {
-                    if BirthmateSecrets.appleSignInEnabled, BirthmateSecrets.isCommunityConfigured {
-                        Text("Live community is enabled.")
-                    } else {
-                        Text("Preview mode uses sample people. Live community requires Apple Developer Program membership.")
-                    }
-                }
-
-                Section {
-                    Toggle(isOn: $notificationManager.isEnabled) {
+                    Button("Change Birthday", role: .destructive) {
                         Label("Daily reminder", systemImage: "bell.fill")
                     }
                     .onChange(of: notificationManager.isEnabled) { _, enabled in
@@ -150,18 +66,13 @@ struct SettingsView: View {
                         showResetConfirmation = true
                     }
                 }
-            }
-            .navigationTitle("Settings")
-            .onReceive(NotificationCenter.default.publisher(for: .appleSignInProvidedName)) { notification in
-                if profileStore.displayName.isEmpty,
-                   let given = notification.userInfo?["givenName"] as? String {
-                    profileStore.displayName = given
+
+                Section {
+                    WikiAttributionFooter()
+                        .frame(maxWidth: .infinity)
                 }
             }
-            .onChange(of: profileStore.displayName) { _, _ in syncProfile() }
-            .onChange(of: profileStore.isDiscoverable) { _, _ in syncProfile() }
-            .onChange(of: profileStore.discoverOthers) { _, _ in syncProfile() }
-            .onChange(of: profileStore.famousTwinName) { _, _ in syncProfile() }
+            .navigationTitle("Settings")
             .confirmationDialog(
                 "Change your birthday?",
                 isPresented: $showResetConfirmation,
@@ -174,44 +85,6 @@ struct SettingsView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             }
-            .sheet(isPresented: $showCirclePreview) {
-                NavigationStack {
-                    CommunityView()
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Done") { showCirclePreview = false }
-                            }
-                        }
-                }
-            }
-            #if DEBUG
-            .onAppear {
-                if ScreenshotLaunchConfig.showCircleSheet {
-                    showCirclePreview = true
-                }
-            }
-            #endif
-        }
-    }
-
-    private func syncProfile() {
-        guard let month = birthdateStore.month, let day = birthdateStore.day else { return }
-
-        Task {
-            do {
-                let viewModel = CommunityViewModel()
-                try await viewModel.syncOwnProfile(
-                    month: month,
-                    day: day,
-                    profile: profileStore,
-                    authStore: authStore
-                )
-                profileSyncMessage = profileStore.isDiscoverable
-                    ? "Your profile is visible in Birthday Circle."
-                    : "You are hidden from Birthday Circle."
-            } catch {
-                profileSyncMessage = error.localizedDescription
-            }
         }
     }
 }
@@ -220,6 +93,4 @@ struct SettingsView: View {
     SettingsView()
         .environmentObject(BirthdateStore())
         .environmentObject(NotificationManager())
-        .environmentObject(ProfileStore())
-        .environmentObject(AuthStore())
 }

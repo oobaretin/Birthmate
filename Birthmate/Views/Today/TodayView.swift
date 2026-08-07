@@ -2,15 +2,10 @@ import SwiftUI
 
 struct TodayView: View {
     @EnvironmentObject var birthdateStore: BirthdateStore
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var authStore: AuthStore
     @EnvironmentObject var notificationManager: NotificationManager
     @Binding var selectedTab: AppTab
-    @AppStorage(WelcomeTipsStore.seenStorageKey) private var hasSeenWelcomeTips = false
     @AppStorage(NotificationPromptStore.seenStorageKey) private var hasSeenNotificationPrompt = false
     @StateObject private var viewModel = TodayViewModel()
-    @StateObject private var activityViewModel = ActivityViewModel()
-    @State private var showCircleSheet = false
     @State private var showNotificationPrompt = false
 
     private var formattedDate: String {
@@ -51,6 +46,11 @@ struct TodayView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                if viewModel.isRefreshing {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ProgressView()
+                    }
+                }
             }
             .navigationDestination(for: TodayPersonRoute.self) { route in
                 PersonDetailView(item: route.item, dateLabel: formattedDate)
@@ -64,22 +64,6 @@ struct TodayView: View {
             }
         }
         .task(id: todayRefreshKey) { await reload(forceRefresh: false) }
-        .task(id: profileStore.discoverOthers) {
-            await activityViewModel.load(
-                authStore: authStore,
-                discoverOthers: profileStore.discoverOthers
-            )
-        }
-        .sheet(isPresented: $showCircleSheet) {
-            NavigationStack {
-                CommunityView()
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Done") { showCircleSheet = false }
-                        }
-                    }
-            }
-        }
         .sheet(isPresented: $showNotificationPrompt) {
             if let month = birthdateStore.month, let day = birthdateStore.day {
                 DailyReminderPromptView(
@@ -94,23 +78,15 @@ struct TodayView: View {
                 .presentationDragIndicator(.visible)
             }
         }
-        .onChange(of: hasSeenWelcomeTips) { _, _ in evaluateNotificationPrompt() }
         .onChange(of: viewModel.featuredPerson?.id) { _, _ in evaluateNotificationPrompt() }
         .onChange(of: viewModel.featuredEvent?.id) { _, _ in evaluateNotificationPrompt() }
-        #if DEBUG
-        .onAppear {
-            if ScreenshotLaunchConfig.showCircleSheet {
-                showCircleSheet = true
-            }
-        }
-        #endif
     }
 
     private func evaluateNotificationPrompt() {
         #if DEBUG
         if ScreenshotLaunchConfig.skipNotificationPrompt { return }
         #endif
-        guard hasSeenWelcomeTips,
+        guard AppLaunchStore.launchCount >= 2,
               !hasSeenNotificationPrompt,
               !notificationManager.isEnabled,
               !showNotificationPrompt,
@@ -133,7 +109,6 @@ struct TodayView: View {
                 }
 
                 statsStorySection
-                activitySection
                 exploreSection
 
                 LastUpdatedLabel(date: viewModel.lastUpdated)
@@ -180,10 +155,6 @@ struct TodayView: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-
-            if let month = birthdateStore.month, let day = birthdateStore.day {
-                BirthdayBanner(month: month, day: day)
-            }
         }
     }
 
@@ -197,6 +168,7 @@ struct TodayView: View {
             ) {
                 viewModel.showAnotherFeaturedPerson()
             }
+            .sensoryFeedback(.selection, trigger: viewModel.featuredPerson?.id)
 
             NavigationLink(value: TodayPersonRoute(item: person)) {
                 FeaturedPersonCard(item: person)
@@ -216,6 +188,7 @@ struct TodayView: View {
             ) {
                 viewModel.showAnotherFeaturedEvent()
             }
+            .sensoryFeedback(.selection, trigger: viewModel.featuredEvent?.id)
 
             NavigationLink(value: TodayEventRoute(item: event)) {
                 FeaturedEventCard(item: event, isDeath: viewModel.isDeath(event))
@@ -250,106 +223,63 @@ struct TodayView: View {
         }
     }
 
-    private var activitySection: some View {
-        Group {
-            if profileStore.discoverOthers, !activityViewModel.events.isEmpty {
-                VStack(alignment: .leading, spacing: 10) {
-                    Label(
-                        activityViewModel.isDemoMode ? "Preview activity" : "Your activity",
-                        systemImage: "bell.fill"
-                    )
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(BirthmateTheme.accent)
-
-                    ForEach(activityViewModel.events.prefix(3)) { event in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(event.title)
-                                .font(.subheadline.weight(.medium))
-                            if let detail = event.detail {
-                                Text(detail)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(14)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(Color(.secondarySystemGroupedBackground))
-                        )
-                    }
-                }
-            }
+    private var exploreSection: some View {
+        Button {
+            selectedTab = .people
+        } label: {
+            ExploreRow(
+                title: "See all birthmates",
+                subtitle: "\(viewModel.birthCount.formatted()) people share \(formattedDate)",
+                systemImage: "person.2.fill"
+            )
         }
+        .buttonStyle(.plain)
     }
 
     private var statsStorySection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        Group {
             if viewModel.birthCount > 0 {
                 Text("You share **\(formattedDate)** with **\(viewModel.birthCount.formatted())** birthmates and **\(viewModel.eventCount.formatted())** historical moments.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(BirthmateTheme.cardPadding)
+                    .background(
+                        RoundedRectangle(cornerRadius: BirthmateTheme.radiusCard, style: .continuous)
+                            .fill(BirthmateTheme.cream.opacity(0.5))
+                    )
             }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(BirthmateTheme.cream.opacity(0.5))
-        )
-    }
-
-    private var exploreSection: some View {
-        VStack(spacing: 12) {
-            Button {
-                showCircleSheet = true
-            } label: {
-                ExploreRow(
-                    title: profileStore.isDemoCommunityMode ? "Preview Birthday Circle" : "See birthday twins",
-                    subtitle: profileStore.isDemoCommunityMode
-                        ? "Sample people who share your day — preview"
-                        : "Meet others in Birthday Circle",
-                    systemImage: "person.3.fill"
-                )
-            }
-            .buttonStyle(.plain)
-
-            Button {
-                selectedTab = .people
-            } label: {
-                ExploreRow(
-                    title: "Explore all birthmates",
-                    subtitle: "\(viewModel.birthCount) people share your day",
-                    systemImage: "person.2.fill"
-                )
-            }
-            .buttonStyle(.plain)
-
-            Button {
-                selectedTab = .history
-            } label: {
-                ExploreRow(
-                    title: "Explore history",
-                    subtitle: "\(viewModel.eventCount) events on your day",
-                    systemImage: "clock.fill"
-                )
-            }
-            .buttonStyle(.plain)
         }
     }
 
     private var loadingView: some View {
         ScrollView {
             VStack(spacing: 16) {
-                RoundedRectangle(cornerRadius: 16)
+                HStack(alignment: .top, spacing: 14) {
+                    Circle()
+                        .fill(Color(.secondarySystemGroupedBackground))
+                        .frame(width: 88, height: 88)
+                    VStack(alignment: .leading, spacing: 8) {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(.secondarySystemGroupedBackground))
+                            .frame(height: 18)
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(.secondarySystemGroupedBackground))
+                            .frame(width: 100, height: 14)
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(.secondarySystemGroupedBackground))
+                            .frame(height: 40)
+                    }
+                }
+                .padding(BirthmateTheme.cardPadding)
+                .background(BirthmateTheme.heroCardBackground())
+
+                RoundedRectangle(cornerRadius: BirthmateTheme.radiusHero)
                     .fill(Color(.secondarySystemGroupedBackground))
-                    .frame(height: 180)
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(.secondarySystemGroupedBackground))
-                    .frame(height: 140)
+                    .frame(height: 100)
             }
-            .padding()
+            .padding(BirthmateTheme.screenPadding)
         }
         .redacted(reason: .placeholder)
     }
@@ -490,8 +420,6 @@ struct ExploreRow: View {
 #Preview {
     TodayView(selectedTab: .constant(.today))
         .environmentObject(BirthdateStore())
-        .environmentObject(ProfileStore())
-        .environmentObject(AuthStore())
         .environmentObject(NotificationManager())
 }
 

@@ -2,18 +2,6 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab: AppTab = .today
-    @AppStorage(WelcomeTipsStore.seenStorageKey) private var hasSeenWelcomeTips = false
-
-    private var showWelcomeTips: Binding<Bool> {
-        Binding(
-            get: { !hasSeenWelcomeTips },
-            set: { isPresented in
-                if !isPresented {
-                    hasSeenWelcomeTips = true
-                }
-            }
-        )
-    }
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -34,24 +22,13 @@ struct MainTabView: View {
                 .tag(AppTab.settings)
         }
         .tint(BirthmateTheme.accent)
-        .sheet(isPresented: showWelcomeTips) {
-            WelcomeTipsView {
-                hasSeenWelcomeTips = true
-            }
-            .presentationDragIndicator(.visible)
-            .presentationDetents([.large])
-        }
-        #if DEBUG
         .onAppear {
-            if ScreenshotLaunchConfig.showWelcome {
-                hasSeenWelcomeTips = false
-            } else if ScreenshotLaunchConfig.skipWelcome {
-                hasSeenWelcomeTips = true
-            }
+            AppLaunchStore.recordLaunchIfNeeded()
+            #if DEBUG
             if let tab = ScreenshotLaunchConfig.selectedTab {
                 selectedTab = tab
             }
+            #endif
         }
-        #endif
     }
 }

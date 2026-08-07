@@ -6,6 +6,12 @@ enum BirthmateTheme {
 
     static let cream = Color(red: 0.98, green: 0.96, blue: 0.93)
 
+    static let screenPadding: CGFloat = 20
+    static let cardPadding: CGFloat = 16
+    static let radiusButton: CGFloat = 14
+    static let radiusCard: CGFloat = 16
+    static let radiusHero: CGFloat = 20
+
     static var onboardingGradient: LinearGradient {
         LinearGradient(
             colors: [
@@ -32,18 +38,24 @@ enum BirthmateTheme {
     }
 
     static func cardBackground() -> some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
+        RoundedRectangle(cornerRadius: radiusCard, style: .continuous)
             .fill(Color(.secondarySystemGroupedBackground))
             .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 
     static func heroCardBackground() -> some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
+        RoundedRectangle(cornerRadius: radiusHero, style: .continuous)
             .fill(Color(.secondarySystemGroupedBackground))
             .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                RoundedRectangle(cornerRadius: radiusHero, style: .continuous)
                     .strokeBorder(accent.opacity(0.12), lineWidth: 1)
             )
             .shadow(color: accent.opacity(0.08), radius: 12, y: 4)
+    }
+}
+
+extension BirthmateSecrets {
+    static var isLiveCommunityEnabled: Bool {
+        appleSignInEnabled && isCommunityConfigured
     }
 }

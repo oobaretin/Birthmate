@@ -61,11 +61,16 @@ seed_birthdate() {
   set_pref_int birthmate_day "$DAY" "$container"
 }
 
-seed_welcome_seen() {
-  local seen="$1"
+seed_notification_prompt_seen() {
   local container
   container="$(prefs_plist)"
-  set_pref_bool birthmate_has_seen_welcome_tips "$seen" "$container"
+  set_pref_bool birthmate_has_seen_notification_prompt true "$container"
+}
+
+seed_launch_count() {
+  local container
+  container="$(prefs_plist)"
+  set_pref_int birthmate_launch_count 2 "$container"
 }
 
 launch_with_args() {
@@ -84,18 +89,19 @@ echo "Fresh install for onboarding screenshot..."
 xcrun simctl uninstall "$SIM_ID" "$BUNDLE" 2>/dev/null || true
 xcrun simctl install "$SIM_ID" "$APP"
 launch_with_args
-sleep 3
+sleep 4
 shot "02-onboarding"
 
-echo "Seeding birth date ($MONTH/$DAY) and skipping welcome..."
+echo "Seeding birth date ($MONTH/$DAY)..."
 seed_birthdate
-seed_welcome_seen true
+seed_notification_prompt_seen
+seed_launch_count
 
 capture_tab() {
   local slug="$1"
   local arg="$2"
   echo "Capturing $slug..."
-  launch_with_args "-SkipWelcomeTips" "-ScreenshotTab=$arg" "-SkipNotificationPrompt"
+  launch_with_args "-ScreenshotTab=$arg" "-SkipNotificationPrompt"
   sleep "$LOAD_WAIT"
   shot "$slug"
 }
@@ -104,18 +110,6 @@ capture_tab "03-today" "today"
 capture_tab "04-birthmates" "birthmates"
 capture_tab "05-history" "history"
 capture_tab "06-settings" "settings"
-
-echo "Capturing Circle preview sheet..."
-seed_welcome_seen true
-launch_with_args "-SkipWelcomeTips" "-ScreenshotTab=today" "-ShowCircleSheet" "-SkipNotificationPrompt"
-sleep 3
-shot "07-circle"
-
-echo "Capturing welcome sheet..."
-seed_welcome_seen false
-launch_with_args "-ShowWelcomeTips" "-SkipNotificationPrompt"
-sleep 3
-shot "08-welcome"
 
 echo ""
 echo "Done. Screenshots in $OUT"

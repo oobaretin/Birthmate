@@ -5,7 +5,6 @@ Capture on **iPhone 16 Pro Max** Simulator (or required App Store device sizes).
 ## Full automated set
 
 ```bash
-chmod +x scripts/capture-all-screenshots.sh
 ./scripts/capture-all-screenshots.sh
 ```
 
@@ -13,13 +12,11 @@ Produces:
 
 | File | Screen |
 |------|--------|
-| `02-onboarding.png` | Month/day picker |
+| `02-onboarding.png` | Date picker with live preview |
 | `03-today.png` | Today tab |
 | `04-birthmates.png` | Birthmates tab |
-| `05-history.png` | History tab |
+| `05-history.png` | On This Day tab |
 | `06-settings.png` | Settings |
-| `07-circle.png` | Birthday Circle (preview) |
-| `08-welcome.png` | Welcome quick tour sheet |
 
 Optional env vars: `SCREENSHOT_MONTH`, `SCREENSHOT_DAY`, `SCREENSHOT_LOAD_WAIT` (default 12s for network).
 

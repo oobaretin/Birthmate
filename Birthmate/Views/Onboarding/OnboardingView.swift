@@ -38,15 +38,15 @@ struct OnboardingView: View {
                     Text("Birthmate")
                         .font(.largeTitle.bold())
 
-                    Text("Choose your birth month and day to discover who shares it and what happened in history on your day.")
+                    Text("Who shares your birthday?")
+                        .font(.title2.weight(.bold))
+                        .multilineTextAlignment(.center)
+
+                    Text("Pick your month and day — no birth year needed.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
-
-                    Text("No birth year needed — just month and day.")
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(BirthmateTheme.accent.opacity(0.85))
                 }
 
                 VStack(spacing: 12) {
@@ -89,6 +89,8 @@ struct OnboardingView: View {
                     OnboardingPreviewCard(
                         dateLabel: selectedDateLabel,
                         sampleName: previewModel.sampleName,
+                        sampleThumbURL: previewModel.sampleThumbURL,
+                        sampleWikiTitle: previewModel.sampleWikiTitle,
                         birthCount: previewModel.birthCount,
                         sampleEvent: previewModel.sampleEvent,
                         isLoading: previewModel.isLoading

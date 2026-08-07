@@ -85,16 +85,17 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack(spacing: 2) {
-                        Text("Birthmates")
-                            .font(.headline)
-                        Text(birthmatesSubtitle)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    HStack(spacing: 6) {
+                        VStack(spacing: 2) {
+                            Text("Birthmates")
+                                .font(.headline)
+                            Text(birthmatesSubtitle)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                         if viewModel.isLoadingMore {
-                            Text("Finding more birthmates…")
-                                .font(.caption2)
-                                .foregroundStyle(BirthmateTheme.accent)
+                            ProgressView()
+                                .controlSize(.small)
                         }
                     }
                 }
@@ -124,14 +125,11 @@ struct HomeView: View {
                     BirthdayBanner(month: month, day: day)
                 }
 
-                HStack(spacing: 16) {
-                    StatBadge(value: viewModel.totalCount, label: "Total", icon: "person.2.fill")
-                    StatBadge(value: viewModel.livingCount, label: "Living", icon: "heart.fill")
-                    StatBadge(
-                        value: viewModel.totalCount - viewModel.livingCount,
-                        label: "Historical",
-                        icon: "book.fill"
-                    )
+                if viewModel.totalCount > 0 {
+                    Text("**\(viewModel.totalCount.formatted())** birthmates on **\(formattedDate)** — **\(viewModel.livingCount.formatted())** living, **\((viewModel.totalCount - viewModel.livingCount).formatted())** historical.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 Picker("Filter", selection: $viewModel.filter) {
@@ -293,14 +291,17 @@ struct PersonDetailView: View {
                             .font(.subheadline.weight(.medium))
                         }
                         .tint(BirthmateTheme.accent)
+                        .sensoryFeedback(.success, trigger: profileStore.isFavorite(item))
 
-                        Button {
-                            Task { await setFamousTwin() }
-                        } label: {
-                            Label("My famous twin", systemImage: "star.fill")
-                                .font(.subheadline.weight(.medium))
+                        if BirthmateSecrets.isLiveCommunityEnabled {
+                            Button {
+                                Task { await setFamousTwin() }
+                            } label: {
+                                Label("My famous twin", systemImage: "star.fill")
+                                    .font(.subheadline.weight(.medium))
+                            }
+                            .tint(BirthmateTheme.accent)
                         }
-                        .tint(BirthmateTheme.accent)
                     }
 
                     if let urlString = item.primaryPage?.contentUrls?.desktop?.page,

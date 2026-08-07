@@ -17,23 +17,9 @@ enum ScreenshotLaunchConfig {
             return .history
         case "settings":
             return .settings
-        case "circle", "community":
-            return nil
         default:
             return nil
         }
-    }
-
-    static var skipWelcome: Bool {
-        CommandLine.arguments.contains("-SkipWelcomeTips")
-    }
-
-    static var showWelcome: Bool {
-        CommandLine.arguments.contains("-ShowWelcomeTips")
-    }
-
-    static var showCircleSheet: Bool {
-        CommandLine.arguments.contains("-ShowCircleSheet")
     }
 
     static var skipNotificationPrompt: Bool {

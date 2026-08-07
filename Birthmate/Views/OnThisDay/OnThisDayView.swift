@@ -98,10 +98,11 @@ struct OnThisDayView: View {
                     BirthdayBanner(month: month, day: day)
                 }
 
-                HStack(spacing: 12) {
-                    StatBadge(value: viewModel.totalCount, label: "Total", icon: "clock.fill")
-                    StatBadge(value: viewModel.highlightCount, label: "Highlights", icon: "star.fill")
-                    StatBadge(value: viewModel.allEvents.count, label: "Events", icon: "book.fill")
+                if viewModel.totalCount > 0 {
+                    Text("**\(viewModel.totalCount.formatted())** moments on **\(formattedDate)** — **\(viewModel.highlightCount.formatted())** highlights and **\(viewModel.allEvents.count.formatted())** events.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 Picker("Filter", selection: $viewModel.filter) {

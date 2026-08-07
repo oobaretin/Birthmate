@@ -3,39 +3,54 @@ import SwiftUI
 struct OnboardingPreviewCard: View {
     let dateLabel: String
     let sampleName: String?
+    let sampleThumbURL: String?
+    let sampleWikiTitle: String?
     let birthCount: Int?
     let sampleEvent: String?
     let isLoading: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Label("Preview for \(dateLabel)", systemImage: "sparkles")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(BirthmateTheme.accent)
 
             if isLoading {
-                HStack(spacing: 8) {
-                    ProgressView()
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(BirthmateTheme.accent.opacity(0.12))
+                        .frame(width: 52, height: 52)
+                        .overlay(ProgressView())
                     Text("Loading a glimpse of your day…")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
             } else if let birthCount, birthCount > 0, let sampleName {
-                Text("Includes **\(sampleName)** and **\(birthCount.formatted())** others born on this day.")
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .top, spacing: 12) {
+                    PersonThumbnailView(
+                        urlString: sampleThumbURL,
+                        wikiTitle: sampleWikiTitle,
+                        size: 52
+                    )
 
-                if let sampleEvent {
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: "clock.fill")
-                            .font(.caption)
-                            .foregroundStyle(BirthmateTheme.accent)
-                            .padding(.top, 2)
-                        Text(sampleEvent)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Includes **\(sampleName)** and **\(birthCount.formatted())** others born on this day.")
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
+
+                        if let sampleEvent {
+                            HStack(alignment: .top, spacing: 6) {
+                                Image(systemName: "clock.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(BirthmateTheme.accent)
+                                    .padding(.top, 2)
+                                Text(sampleEvent)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
                     }
                 }
             } else {
@@ -44,12 +59,12 @@ struct OnboardingPreviewCard: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .padding(14)
+        .padding(BirthmateTheme.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(BirthmateTheme.cream.opacity(0.65))
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: BirthmateTheme.radiusCard, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: BirthmateTheme.radiusCard, style: .continuous)
                 .strokeBorder(BirthmateTheme.accent.opacity(0.15), lineWidth: 1)
         )
         .animation(.easeInOut(duration: 0.2), value: isLoading)
