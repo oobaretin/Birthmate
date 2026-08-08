@@ -38,13 +38,8 @@ struct TodayView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack(spacing: 2) {
-                        Text("Today")
-                            .font(.headline)
-                        Text(formattedDate)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text("Today")
+                        .font(.headline)
                 }
                 if viewModel.isRefreshing {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -98,6 +93,10 @@ struct TodayView: View {
     private var scrollContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                if let month = birthdateStore.month, let day = birthdateStore.day {
+                    BirthdayBanner(month: month, day: day)
+                }
+
                 headerSection
 
                 if let person = viewModel.featuredPerson {
