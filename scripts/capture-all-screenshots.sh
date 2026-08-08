@@ -2,16 +2,16 @@
 # Build, seed Simulator state, and capture a full App Store screenshot set.
 set -euo pipefail
 
-export DEVELOPER_DIR="${DEVELOPER_DIR:-/Users/osagieobaretin/Downloads/Xcode.app/Contents/Developer}"
+export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SIM_ID="${SIM_ID:-57671833-C49B-4873-AE2E-63D80F929C1A}"
+SIM_ID="${SIM_ID:-364A3F84-04A9-4AE2-B5E6-52A9DD074DCB}"
 BUNDLE="com.birthmate.app"
 DERIVED="$ROOT/.derivedData"
 APP="$DERIVED/Build/Products/Debug-iphonesimulator/Birthmate.app"
 OUT="$ROOT/AppStoreScreenshots"
 MONTH="${SCREENSHOT_MONTH:-7}"
 DAY="${SCREENSHOT_DAY:-29}"
-LOAD_WAIT="${SCREENSHOT_LOAD_WAIT:-12}"
+LOAD_WAIT="${SCREENSHOT_LOAD_WAIT:-35}"
 
 mkdir -p "$OUT"
 
@@ -93,6 +93,7 @@ sleep 4
 shot "02-onboarding"
 
 echo "Seeding birth date ($MONTH/$DAY)..."
+terminate_app
 seed_birthdate
 seed_notification_prompt_seen
 seed_launch_count
@@ -101,7 +102,7 @@ capture_tab() {
   local slug="$1"
   local arg="$2"
   echo "Capturing $slug..."
-  launch_with_args "-ScreenshotTab=$arg" "-SkipNotificationPrompt"
+  launch_with_args "-ScreenshotBirthdate=${MONTH}/${DAY}" "-ScreenshotTab=$arg" "-SkipNotificationPrompt"
   sleep "$LOAD_WAIT"
   shot "$slug"
 }

@@ -27,7 +27,7 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Button("Change Birthday", role: .destructive) {
+                    Toggle(isOn: $notificationManager.isEnabled) {
                         Label("Daily reminder", systemImage: "bell.fill")
                     }
                     .onChange(of: notificationManager.isEnabled) { _, enabled in

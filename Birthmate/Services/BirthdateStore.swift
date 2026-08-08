@@ -11,6 +11,11 @@ final class BirthdateStore: ObservableObject {
 
     init() {
         load()
+        #if DEBUG
+        if let seeded = ScreenshotLaunchConfig.seededBirthdate {
+            save(month: seeded.month, day: seeded.day)
+        }
+        #endif
     }
 
     func save(month: Int, day: Int) {

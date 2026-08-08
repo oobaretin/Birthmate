@@ -25,5 +25,19 @@ enum ScreenshotLaunchConfig {
     static var skipNotificationPrompt: Bool {
         CommandLine.arguments.contains("-SkipNotificationPrompt")
     }
+
+    static var seededBirthdate: (month: Int, day: Int)? {
+        guard let arg = CommandLine.arguments.first(where: { $0.hasPrefix("-ScreenshotBirthdate=") }) else {
+            return nil
+        }
+        let value = String(arg.dropFirst("-ScreenshotBirthdate=".count))
+        let parts = value.split(separator: "/")
+        guard parts.count == 2,
+              let month = Int(parts[0]), (1 ... 12).contains(month),
+              let day = Int(parts[1]), (1 ... 31).contains(day) else {
+            return nil
+        }
+        return (month, day)
+    }
 }
 #endif
