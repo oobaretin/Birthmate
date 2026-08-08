@@ -114,8 +114,6 @@ struct TodayView: View {
                 LastUpdatedLabel(date: viewModel.lastUpdated)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 4)
-
-                WikiAttributionFooter()
             }
             .padding()
         }
