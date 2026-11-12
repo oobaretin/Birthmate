@@ -4,7 +4,7 @@ set -euo pipefail
 
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SIM_ID="${SIM_ID:-364A3F84-04A9-4AE2-B5E6-52A9DD074DCB}"
+SIM_ID="${SIM_ID:-4625AE63-237E-42D5-BF3D-9BD554ACB589}"
 BUNDLE="com.birthmate.app"
 DERIVED="$ROOT/.derivedData"
 APP="$DERIVED/Build/Products/Debug-iphonesimulator/Birthmate.app"

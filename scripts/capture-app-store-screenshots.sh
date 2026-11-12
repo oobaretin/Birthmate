@@ -3,9 +3,9 @@
 # Run after onboarding, or complete onboarding manually when prompted.
 set -euo pipefail
 
-export DEVELOPER_DIR="${DEVELOPER_DIR:-/Users/osagieobaretin/Downloads/Xcode.app/Contents/Developer}"
+export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SIM_ID="${SIM_ID:-57671833-C49B-4873-AE2E-63D80F929C1A}"
+SIM_ID="${SIM_ID:-4625AE63-237E-42D5-BF3D-9BD554ACB589}"
 OUT="$ROOT/AppStoreScreenshots"
 mkdir -p "$OUT"
 
