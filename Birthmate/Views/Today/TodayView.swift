@@ -7,6 +7,7 @@ struct TodayView: View {
     @AppStorage(NotificationPromptStore.seenStorageKey) private var hasSeenNotificationPrompt = false
     @StateObject private var viewModel = TodayViewModel()
     @State private var showNotificationPrompt = false
+    @State private var navigationPath = NavigationPath()
 
     private var formattedDate: String {
         guard let month = birthdateStore.month, let day = birthdateStore.day else { return "" }
@@ -23,7 +24,7 @@ struct TodayView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             Group {
                 if viewModel.isLoading && viewModel.featuredPerson == nil && viewModel.featuredEvent == nil {
                     loadingView
@@ -159,39 +160,40 @@ struct TodayView: View {
     @ViewBuilder
     private func featuredPersonSection(_ person: OnThisDayItem) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            featuredSectionHeader(
-                title: "Featured Birthmate",
-                systemImage: "person.crop.circle.fill",
-                actionTitle: "Another"
-            ) {
-                viewModel.showAnotherFeaturedPerson()
-            }
-            .sensoryFeedback(.selection, trigger: viewModel.featuredPerson?.id)
+            Label("Featured Birthmate", systemImage: "person.crop.circle.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(BirthmateTheme.accent)
 
-            NavigationLink(value: TodayPersonRoute(item: person)) {
+            featuredCardWithShuffle(
+                person: person,
+                shuffle: { viewModel.showAnotherFeaturedPerson() },
+                shuffleTrigger: viewModel.featuredPerson?.id
+            ) {
+                navigationPath.append(TodayPersonRoute(item: person))
+            } card: {
                 FeaturedPersonCard(item: person)
             }
-            .buttonStyle(.plain)
             .accessibilityLabel("Featured birthmate, \(person.displayName)")
+            .accessibilityHint("Opens birthmate details")
         }
     }
 
     @ViewBuilder
     private func featuredEventSection(_ event: OnThisDayItem) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            featuredSectionHeader(
-                title: "On This Day in History",
-                systemImage: "clock.fill",
-                actionTitle: "Another"
-            ) {
-                viewModel.showAnotherFeaturedEvent()
-            }
-            .sensoryFeedback(.selection, trigger: viewModel.featuredEvent?.id)
+            Label("On This Day in History", systemImage: "clock.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(BirthmateTheme.accent)
 
-            NavigationLink(value: TodayEventRoute(item: event)) {
+            featuredCardWithShuffle(
+                person: event,
+                shuffle: { viewModel.showAnotherFeaturedEvent() },
+                shuffleTrigger: viewModel.featuredEvent?.id
+            ) {
+                navigationPath.append(TodayEventRoute(item: event))
+            } card: {
                 FeaturedEventCard(item: event, isDeath: viewModel.isDeath(event))
             }
-            .buttonStyle(.plain)
             .accessibilityLabel(
                 viewModel.isDeath(event)
                     ? "Featured death on this day, \(event.displayText)"
@@ -200,25 +202,31 @@ struct TodayView: View {
         }
     }
 
-    private func featuredSectionHeader(
-        title: String,
-        systemImage: String,
-        actionTitle: String,
-        action: @escaping () -> Void
+    private func featuredCardWithShuffle<Card: View>(
+        person: OnThisDayItem,
+        shuffle: @escaping () -> Void,
+        shuffleTrigger: String?,
+        openDetail: @escaping () -> Void,
+        @ViewBuilder card: () -> Card
     ) -> some View {
-        HStack(alignment: .center) {
-            Label(title, systemImage: systemImage)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(BirthmateTheme.accent)
+        ZStack(alignment: .topTrailing) {
+            Button(action: openDetail) {
+                card()
+            }
+            .buttonStyle(.plain)
+            .id(person.id)
 
-            Spacer()
-
-            Button(actionTitle, action: action)
+            Button("Another", action: shuffle)
                 .font(.caption.weight(.semibold))
                 .buttonStyle(.bordered)
                 .tint(BirthmateTheme.accent)
                 .controlSize(.small)
+                .buttonBorderShape(.capsule)
+                .padding(12)
+                .background(.ultraThinMaterial, in: Capsule())
+                .padding(8)
         }
+        .sensoryFeedback(.selection, trigger: shuffleTrigger)
     }
 
     private var exploreSection: some View {

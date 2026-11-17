@@ -40,8 +40,7 @@ final class TodayViewModel: ObservableObject {
                 highlights: cached.highlights,
                 deaths: cached.deaths,
                 month: month,
-                day: day,
-                shouldRepickFeatured: isInitialLoad
+                day: day
             )
             if let fetchedAt = cached.fetchedAt {
                 lastUpdated = fetchedAt
@@ -82,8 +81,7 @@ final class TodayViewModel: ObservableObject {
                 highlights: freshSelected.items.filter(\.hasValidEventYear),
                 deaths: freshDeaths.items.filter(\.hasValidEventYear),
                 month: month,
-                day: day,
-                shouldRepickFeatured: isInitialLoad
+                day: day
             )
             lastUpdated = max(
                 freshEvents.fetchedAt,
@@ -214,8 +212,7 @@ final class TodayViewModel: ObservableObject {
         highlights: [OnThisDayItem],
         deaths: [OnThisDayItem],
         month: Int,
-        day: Int,
-        shouldRepickFeatured: Bool
+        day: Int
     ) {
         cachedBirths = OnThisDayMerger.merge(cachedBirths, births)
         cachedEvents = events
@@ -228,10 +225,18 @@ final class TodayViewModel: ObservableObject {
         highlightCount = highlights.count
         eventCount = uniqueHistoryCount(highlights: highlights, events: events, deaths: deaths)
 
-        if shouldRepickFeatured {
-            repickFeaturedItems()
-        }
+        fillFeaturedIfNeeded()
         syncWidgetSnapshot()
+    }
+
+    /// Picks featured items only for empty slots so partial cache loads cannot skip birthmates.
+    private func fillFeaturedIfNeeded() {
+        if featuredPerson == nil, !cachedBirths.isEmpty {
+            featuredPerson = randomPerson(excluding: nil)
+        }
+        if featuredEvent == nil, !eventPool().isEmpty {
+            featuredEvent = randomEvent(excluding: nil)
+        }
     }
 
     private func uniqueHistoryCount(
@@ -247,11 +252,6 @@ final class TodayViewModel: ObservableObject {
             }
         }
         return count
-    }
-
-    private func repickFeaturedItems() {
-        featuredPerson = randomPerson(excluding: nil)
-        featuredEvent = randomEvent(excluding: nil)
     }
 
     private func randomPerson(excluding excludedID: String?) -> OnThisDayItem? {
