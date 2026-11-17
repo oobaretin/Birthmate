@@ -160,19 +160,22 @@ struct TodayView: View {
     @ViewBuilder
     private func featuredPersonSection(_ person: OnThisDayItem) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Featured Birthmate", systemImage: "person.crop.circle.fill")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(BirthmateTheme.accent)
-
-            featuredCardWithShuffle(
-                person: person,
-                shuffle: { viewModel.showAnotherFeaturedPerson() },
-                shuffleTrigger: viewModel.featuredPerson?.id
+            featuredSectionHeader(
+                title: "Featured Birthmate",
+                systemImage: "person.crop.circle.fill",
+                actionTitle: "Another"
             ) {
+                viewModel.showAnotherFeaturedPerson()
+            }
+            .sensoryFeedback(.selection, trigger: viewModel.featuredPerson?.id)
+
+            Button {
                 navigationPath.append(TodayPersonRoute(item: person))
-            } card: {
+            } label: {
                 FeaturedPersonCard(item: person)
             }
+            .buttonStyle(.plain)
+            .id(person.id)
             .accessibilityLabel("Featured birthmate, \(person.displayName)")
             .accessibilityHint("Opens birthmate details")
         }
@@ -181,19 +184,22 @@ struct TodayView: View {
     @ViewBuilder
     private func featuredEventSection(_ event: OnThisDayItem) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("On This Day in History", systemImage: "clock.fill")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(BirthmateTheme.accent)
-
-            featuredCardWithShuffle(
-                person: event,
-                shuffle: { viewModel.showAnotherFeaturedEvent() },
-                shuffleTrigger: viewModel.featuredEvent?.id
+            featuredSectionHeader(
+                title: "On This Day in History",
+                systemImage: "clock.fill",
+                actionTitle: "Another"
             ) {
+                viewModel.showAnotherFeaturedEvent()
+            }
+            .sensoryFeedback(.selection, trigger: viewModel.featuredEvent?.id)
+
+            Button {
                 navigationPath.append(TodayEventRoute(item: event))
-            } card: {
+            } label: {
                 FeaturedEventCard(item: event, isDeath: viewModel.isDeath(event))
             }
+            .buttonStyle(.plain)
+            .id(event.id)
             .accessibilityLabel(
                 viewModel.isDeath(event)
                     ? "Featured death on this day, \(event.displayText)"
@@ -202,31 +208,26 @@ struct TodayView: View {
         }
     }
 
-    private func featuredCardWithShuffle<Card: View>(
-        person: OnThisDayItem,
-        shuffle: @escaping () -> Void,
-        shuffleTrigger: String?,
-        openDetail: @escaping () -> Void,
-        @ViewBuilder card: () -> Card
+    private func featuredSectionHeader(
+        title: String,
+        systemImage: String,
+        actionTitle: String,
+        action: @escaping () -> Void
     ) -> some View {
-        ZStack(alignment: .topTrailing) {
-            Button(action: openDetail) {
-                card()
-            }
-            .buttonStyle(.plain)
-            .id(person.id)
+        HStack(alignment: .center) {
+            Label(title, systemImage: systemImage)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(BirthmateTheme.accent)
 
-            Button("Another", action: shuffle)
+            Spacer()
+
+            Button(actionTitle, action: action)
                 .font(.caption.weight(.semibold))
                 .buttonStyle(.bordered)
                 .tint(BirthmateTheme.accent)
                 .controlSize(.small)
                 .buttonBorderShape(.capsule)
-                .padding(12)
-                .background(.ultraThinMaterial, in: Capsule())
-                .padding(8)
         }
-        .sensoryFeedback(.selection, trigger: shuffleTrigger)
     }
 
     private var exploreSection: some View {
@@ -320,8 +321,7 @@ struct FeaturedPersonCard: View {
         VStack(alignment: .leading, spacing: 0) {
             FeaturedPortraitView(
                 urlString: item.primaryPage?.thumbnail?.source,
-                wikiTitle: item.primaryPage?.title,
-                height: 200
+                wikiTitle: item.primaryPage?.title
             )
             .clipShape(
                 UnevenRoundedRectangle(

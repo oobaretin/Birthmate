@@ -124,55 +124,76 @@ struct PersonThumbnailView: View {
     }
 }
 
-/// Wide hero photo for Today featured cards and similar surfaces.
+/// Wide hero photo for Today featured cards — full width, height follows aspect ratio (no side gutters).
 struct FeaturedPortraitView: View {
     let urlString: String?
     var wikiTitle: String?
-    var height: CGFloat = 200
+    /// Caps very tall portraits; wide landscape shots size naturally from width.
+    var maxBandHeight: CGFloat = 340
+    var minBandHeight: CGFloat = 120
+
+    private enum LoadState: Equatable {
+        case loading
+        case loaded
+        case unavailable
+    }
 
     @State private var image: UIImage?
+    @State private var loadState: LoadState = .loading
 
     private var loadKey: String {
-        "\(urlString ?? "")|\(wikiTitle ?? "")|\(height)"
+        "\(urlString ?? "")|\(wikiTitle ?? "")|\(maxBandHeight)"
     }
 
     var body: some View {
         Group {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: height)
-                    .clipped()
-            } else {
-                placeholder
+            switch loadState {
+            case .loading:
+                ProgressView()
+                    .tint(BirthmateTheme.accent)
+                    .frame(maxWidth: .infinity, minHeight: minBandHeight, maxHeight: minBandHeight)
+            case .loaded:
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(image.size, contentMode: .fit)
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: maxBandHeight, alignment: .top)
+                        .accessibilityLabel("Photo")
+                }
+            case .unavailable:
+                VStack(spacing: 8) {
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 44))
+                        .foregroundStyle(BirthmateTheme.accent.opacity(0.45))
+                    Text("No photo on Wikipedia")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, minHeight: minBandHeight, maxHeight: minBandHeight)
             }
         }
+        .frame(maxWidth: .infinity)
+        .background(Color(.secondarySystemGroupedBackground))
         .task(id: loadKey) {
             await loadImage()
         }
     }
 
-    private var placeholder: some View {
-        Rectangle()
-            .fill(BirthmateTheme.accent.opacity(0.12))
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
-            .overlay {
-                ProgressView()
-                    .tint(BirthmateTheme.accent)
-            }
-    }
-
     private func loadImage() async {
-        image = nil
+        await MainActor.run {
+            image = nil
+            loadState = .loading
+        }
         let loaded = await WikiPersonImageService.shared.image(
             primaryURL: urlString,
             wikiTitle: wikiTitle,
-            width: 640
+            width: 800
         )
-        await MainActor.run { image = loaded }
+        await MainActor.run {
+            image = loaded
+            loadState = loaded == nil ? .unavailable : .loaded
+        }
     }
 }
 
