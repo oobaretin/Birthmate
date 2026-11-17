@@ -256,6 +256,9 @@ struct PersonDetailView: View {
                 )
 
                 VStack(alignment: .leading, spacing: 12) {
+                    Text(item.displayName)
+                        .font(.title.bold())
+
                     HStack(spacing: 8) {
                         if let year = item.birthYear {
                             Text("Born \(String(year))")
@@ -269,16 +272,16 @@ struct PersonDetailView: View {
                         }
                     }
 
-                    Text(item.displayName)
-                        .font(.title.bold())
-
-                    ShareBirthmateCardLink(item: item, dateLabel: dateLabel)
-                        .padding(.vertical, 4)
-
                     Text(bodyText)
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
+
+                    ShareBirthmateCardLink(item: item, dateLabel: dateLabel, style: .prominent)
+                        .buttonStyle(.borderedProminent)
+                        .tint(BirthmateTheme.accent)
+                        .controlSize(.large)
+                        .padding(.top, 4)
 
                     HStack(spacing: 12) {
                         Button {

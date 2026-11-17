@@ -109,6 +109,7 @@ struct TodayView: View {
 
                 statsStorySection
                 exploreSection
+                exploreHistorySection
 
                 LastUpdatedLabel(date: viewModel.lastUpdated)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -233,6 +234,19 @@ struct TodayView: View {
         .buttonStyle(.plain)
     }
 
+    private var exploreHistorySection: some View {
+        Button {
+            selectedTab = .history
+        } label: {
+            ExploreRow(
+                title: "Browse history",
+                subtitle: "\(viewModel.eventCount.formatted()) moments on \(formattedDate)",
+                systemImage: "clock.fill"
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
     private var statsStorySection: some View {
         Group {
             if viewModel.birthCount > 0 {
@@ -242,10 +256,7 @@ struct TodayView: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(BirthmateTheme.cardPadding)
-                    .background(
-                        RoundedRectangle(cornerRadius: BirthmateTheme.radiusCard, style: .continuous)
-                            .fill(BirthmateTheme.cream.opacity(0.5))
-                    )
+                    .background(BirthmateTheme.heroCardBackground())
             }
         }
     }
@@ -253,10 +264,10 @@ struct TodayView: View {
     private var loadingView: some View {
         ScrollView {
             VStack(spacing: 16) {
-                HStack(alignment: .top, spacing: 14) {
-                    Circle()
+                VStack(alignment: .leading, spacing: 0) {
+                    RoundedRectangle(cornerRadius: BirthmateTheme.radiusHero)
                         .fill(Color(.secondarySystemGroupedBackground))
-                        .frame(width: 88, height: 88)
+                        .frame(height: 200)
                     VStack(alignment: .leading, spacing: 8) {
                         RoundedRectangle(cornerRadius: 4)
                             .fill(Color(.secondarySystemGroupedBackground))
@@ -268,8 +279,8 @@ struct TodayView: View {
                             .fill(Color(.secondarySystemGroupedBackground))
                             .frame(height: 40)
                     }
+                    .padding(BirthmateTheme.cardPadding)
                 }
-                .padding(BirthmateTheme.cardPadding)
                 .background(BirthmateTheme.heroCardBackground())
 
                 RoundedRectangle(cornerRadius: BirthmateTheme.radiusHero)
@@ -299,13 +310,22 @@ struct FeaturedPersonCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top, spacing: 14) {
-                PersonThumbnailView(
-                    urlString: item.primaryPage?.thumbnail?.source,
-                    wikiTitle: item.primaryPage?.title,
-                    size: 88
+            FeaturedPortraitView(
+                urlString: item.primaryPage?.thumbnail?.source,
+                wikiTitle: item.primaryPage?.title,
+                height: 200
+            )
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: BirthmateTheme.radiusHero,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: BirthmateTheme.radiusHero,
+                    style: .continuous
                 )
+            )
 
+            HStack(alignment: .top, spacing: 10) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(item.displayName)
                         .font(.title3.bold())
@@ -322,7 +342,7 @@ struct FeaturedPersonCard: View {
                         Text(snippet)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .lineLimit(3)
+                            .lineLimit(2)
                     }
                 }
 
@@ -407,10 +427,7 @@ struct ExploreRow: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
-        )
+        .background(BirthmateTheme.heroCardBackground())
     }
 }
 

@@ -124,6 +124,58 @@ struct PersonThumbnailView: View {
     }
 }
 
+/// Wide hero photo for Today featured cards and similar surfaces.
+struct FeaturedPortraitView: View {
+    let urlString: String?
+    var wikiTitle: String?
+    var height: CGFloat = 200
+
+    @State private var image: UIImage?
+
+    private var loadKey: String {
+        "\(urlString ?? "")|\(wikiTitle ?? "")|\(height)"
+    }
+
+    var body: some View {
+        Group {
+            if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: height)
+                    .clipped()
+            } else {
+                placeholder
+            }
+        }
+        .task(id: loadKey) {
+            await loadImage()
+        }
+    }
+
+    private var placeholder: some View {
+        Rectangle()
+            .fill(BirthmateTheme.accent.opacity(0.12))
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .overlay {
+                ProgressView()
+                    .tint(BirthmateTheme.accent)
+            }
+    }
+
+    private func loadImage() async {
+        image = nil
+        let loaded = await WikiPersonImageService.shared.image(
+            primaryURL: urlString,
+            wikiTitle: wikiTitle,
+            width: 640
+        )
+        await MainActor.run { image = loaded }
+    }
+}
+
 struct PersonHeroImageView: View {
     let urlString: String?
     var wikiTitle: String?
