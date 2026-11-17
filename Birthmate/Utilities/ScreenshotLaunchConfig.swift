@@ -26,6 +26,11 @@ enum ScreenshotLaunchConfig {
         CommandLine.arguments.contains("-SkipNotificationPrompt")
     }
 
+    /// Shuffles Today’s featured birthmate until one has a Wikipedia thumbnail (screenshot automation).
+    static var requireFeaturedPhoto: Bool {
+        CommandLine.arguments.contains("-ScreenshotRequireFeaturedPhoto")
+    }
+
     static var seededBirthdate: (month: Int, day: Int)? {
         guard let arg = CommandLine.arguments.first(where: { $0.hasPrefix("-ScreenshotBirthdate=") }) else {
             return nil

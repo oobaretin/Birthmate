@@ -93,7 +93,40 @@ final class TodayViewModel: ObservableObject {
                 errorMessage = error.localizedDescription
             }
         }
+
+        #if DEBUG
+        if ScreenshotLaunchConfig.requireFeaturedPhoto {
+            await prepareFeaturedPersonForScreenshot()
+        }
+        #endif
     }
+
+    #if DEBUG
+    /// Picks a featured birthmate with a photo URL and preloads the hero image for App Store captures.
+    private func prepareFeaturedPersonForScreenshot() async {
+        pickFeaturedPersonWithPhotoURLs()
+        guard let person = featuredPerson else { return }
+        _ = await WikiPersonImageService.shared.image(
+            primaryURL: person.primaryPage?.thumbnail?.source ?? person.primaryPage?.originalImage?.source,
+            wikiTitle: person.primaryPage?.title,
+            width: 800
+        )
+    }
+
+    private func pickFeaturedPersonWithPhotoURLs() {
+        for _ in 0 ..< 80 {
+            guard let person = featuredPerson else { return }
+            if hasLikelyPhotoURL(person) { return }
+            showAnotherFeaturedPerson()
+        }
+    }
+
+    private func hasLikelyPhotoURL(_ item: OnThisDayItem) -> Bool {
+        if item.primaryPage?.thumbnail?.source != nil { return true }
+        if item.primaryPage?.originalImage?.source != nil { return true }
+        return false
+    }
+    #endif
 
     func showAnotherFeaturedPerson() {
         guard loadedMonth != nil, loadedDay != nil else { return }

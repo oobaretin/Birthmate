@@ -12,6 +12,7 @@ OUT="$ROOT/AppStoreScreenshots"
 MONTH="${SCREENSHOT_MONTH:-7}"
 DAY="${SCREENSHOT_DAY:-29}"
 LOAD_WAIT="${SCREENSHOT_LOAD_WAIT:-35}"
+TODAY_LOAD_WAIT="${SCREENSHOT_TODAY_LOAD_WAIT:-50}"
 
 mkdir -p "$OUT"
 
@@ -101,13 +102,18 @@ seed_launch_count
 capture_tab() {
   local slug="$1"
   local arg="$2"
+  shift 2
+  local wait="$LOAD_WAIT"
+  if [[ "$slug" == "03-today" ]]; then
+    wait="$TODAY_LOAD_WAIT"
+  fi
   echo "Capturing $slug..."
-  launch_with_args "-ScreenshotBirthdate=${MONTH}/${DAY}" "-ScreenshotTab=$arg" "-SkipNotificationPrompt"
-  sleep "$LOAD_WAIT"
+  launch_with_args "-ScreenshotBirthdate=${MONTH}/${DAY}" "-ScreenshotTab=$arg" "-SkipNotificationPrompt" "$@"
+  sleep "$wait"
   shot "$slug"
 }
 
-capture_tab "03-today" "today"
+capture_tab "03-today" "today" -ScreenshotRequireFeaturedPhoto
 capture_tab "04-birthmates" "birthmates"
 capture_tab "05-history" "history"
 capture_tab "06-settings" "settings"
